@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "fieldName": "firstName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "password",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "birthDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "entryDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isEmployed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "department",
+      "otherEntityName": "department",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "employee"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "no",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Employee",
+  "changelogDate": "20211029150657"
+}

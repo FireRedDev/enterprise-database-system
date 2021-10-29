@@ -41,6 +41,8 @@
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "lastLiquibaseTimestamp": 1635520498000,
+    "entities": ["TargetSystem", "Department", "Employee", "TargetSystemCredentials"]
   }
 }
