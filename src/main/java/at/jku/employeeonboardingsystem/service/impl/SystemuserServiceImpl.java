@@ -55,11 +55,15 @@ public class SystemuserServiceImpl implements SystemuserService {
         return systemuserRepository.findAll(pageable);
     }
 
+    public Page<Systemuser> findAllWithEagerRelationships(Pageable pageable) {
+        return systemuserRepository.findAllWithEagerRelationships(pageable);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Systemuser> findOne(Long id) {
         log.debug("Request to get Systemuser : {}", id);
-        return systemuserRepository.findById(id);
+        return systemuserRepository.findOneWithEagerRelationships(id);
     }
 
     @Override

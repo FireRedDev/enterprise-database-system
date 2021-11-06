@@ -43,7 +43,7 @@
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1636228887000,
-    "entities": ["Systemuser"]
+    "lastLiquibaseTimestamp": 1636229326000,
+    "entities": ["Systemuser", "Targetsystem", "Targetsystemcredentials", "Department"]
   }
 }

@@ -15,6 +15,14 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "systemuser"
+    },
+    {
+      "relationshipName": "department",
+      "otherEntityName": "department",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "employee"
     }
   ],
   "service": "serviceImpl",

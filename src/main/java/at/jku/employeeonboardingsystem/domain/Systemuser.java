@@ -1,7 +1,10 @@
 package at.jku.employeeonboardingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -27,6 +30,15 @@ public class Systemuser implements Serializable {
     @NotNull
     @JoinColumn(unique = true)
     private User user;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_systemuser__department",
+        joinColumns = @JoinColumn(name = "systemuser_id"),
+        inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
+    @JsonIgnoreProperties(value = { "targetsystems" }, allowSetters = true)
+    private Set<Department> departments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -66,6 +78,29 @@ public class Systemuser implements Serializable {
 
     public Systemuser user(User user) {
         this.setUser(user);
+        return this;
+    }
+
+    public Set<Department> getDepartments() {
+        return this.departments;
+    }
+
+    public void setDepartments(Set<Department> departments) {
+        this.departments = departments;
+    }
+
+    public Systemuser departments(Set<Department> departments) {
+        this.setDepartments(departments);
+        return this;
+    }
+
+    public Systemuser addDepartment(Department department) {
+        this.departments.add(department);
+        return this;
+    }
+
+    public Systemuser removeDepartment(Department department) {
+        this.departments.remove(department);
         return this;
     }
 

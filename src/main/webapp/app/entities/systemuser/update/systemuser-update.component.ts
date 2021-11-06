@@ -9,6 +9,8 @@ import { ISystemuser, Systemuser } from '../systemuser.model';
 import { SystemuserService } from '../service/systemuser.service';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
+import { IDepartment } from 'app/entities/department/department.model';
+import { DepartmentService } from 'app/entities/department/service/department.service';
 
 @Component({
   selector: 'jhi-systemuser-update',
@@ -18,16 +20,19 @@ export class SystemuserUpdateComponent implements OnInit {
   isSaving = false;
 
   usersSharedCollection: IUser[] = [];
+  departmentsSharedCollection: IDepartment[] = [];
 
   editForm = this.fb.group({
     id: [],
     entryDate: [],
     user: [null, Validators.required],
+    departments: [],
   });
 
   constructor(
     protected systemuserService: SystemuserService,
     protected userService: UserService,
+    protected departmentService: DepartmentService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -58,6 +63,21 @@ export class SystemuserUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackDepartmentById(index: number, item: IDepartment): number {
+    return item.id!;
+  }
+
+  getSelectedDepartment(option: IDepartment, selectedVals?: IDepartment[]): IDepartment {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISystemuser>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -82,9 +102,14 @@ export class SystemuserUpdateComponent implements OnInit {
       id: systemuser.id,
       entryDate: systemuser.entryDate,
       user: systemuser.user,
+      departments: systemuser.departments,
     });
 
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, systemuser.user);
+    this.departmentsSharedCollection = this.departmentService.addDepartmentToCollectionIfMissing(
+      this.departmentsSharedCollection,
+      ...(systemuser.departments ?? [])
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -93,6 +118,16 @@ export class SystemuserUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('user')!.value)))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
+
+    this.departmentService
+      .query()
+      .pipe(map((res: HttpResponse<IDepartment[]>) => res.body ?? []))
+      .pipe(
+        map((departments: IDepartment[]) =>
+          this.departmentService.addDepartmentToCollectionIfMissing(departments, ...(this.editForm.get('departments')!.value ?? []))
+        )
+      )
+      .subscribe((departments: IDepartment[]) => (this.departmentsSharedCollection = departments));
   }
 
   protected createFromForm(): ISystemuser {
@@ -101,6 +136,7 @@ export class SystemuserUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       entryDate: this.editForm.get(['entryDate'])!.value,
       user: this.editForm.get(['user'])!.value,
+      departments: this.editForm.get(['departments'])!.value,
     };
   }
 }

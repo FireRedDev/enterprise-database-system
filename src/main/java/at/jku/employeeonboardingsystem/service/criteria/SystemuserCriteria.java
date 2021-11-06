@@ -31,6 +31,8 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     private LongFilter userId;
 
+    private LongFilter departmentId;
+
     private Boolean distinct;
 
     public SystemuserCriteria() {}
@@ -39,6 +41,7 @@ public class SystemuserCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.entryDate = other.entryDate == null ? null : other.entryDate.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -92,6 +95,21 @@ public class SystemuserCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public LongFilter getDepartmentId() {
+        return departmentId;
+    }
+
+    public LongFilter departmentId() {
+        if (departmentId == null) {
+            departmentId = new LongFilter();
+        }
+        return departmentId;
+    }
+
+    public void setDepartmentId(LongFilter departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -113,13 +131,14 @@ public class SystemuserCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(entryDate, that.entryDate) &&
             Objects.equals(userId, that.userId) &&
+            Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entryDate, userId, distinct);
+        return Objects.hash(id, entryDate, userId, departmentId, distinct);
     }
 
     // prettier-ignore
@@ -129,6 +148,7 @@ public class SystemuserCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (entryDate != null ? "entryDate=" + entryDate + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
+            (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

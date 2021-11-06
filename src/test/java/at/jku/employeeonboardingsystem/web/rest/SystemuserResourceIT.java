@@ -2,25 +2,34 @@ package at.jku.employeeonboardingsystem.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import at.jku.employeeonboardingsystem.IntegrationTest;
+import at.jku.employeeonboardingsystem.domain.Department;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
 import at.jku.employeeonboardingsystem.domain.User;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
+import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link SystemuserResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class SystemuserResourceIT {
@@ -46,6 +56,12 @@ class SystemuserResourceIT {
 
     @Autowired
     private SystemuserRepository systemuserRepository;
+
+    @Mock
+    private SystemuserRepository systemuserRepositoryMock;
+
+    @Mock
+    private SystemuserService systemuserServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -149,6 +165,24 @@ class SystemuserResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemuser.getId().intValue())))
             .andExpect(jsonPath("$.[*].entryDate").value(hasItem(DEFAULT_ENTRY_DATE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSystemusersWithEagerRelationshipsIsEnabled() throws Exception {
+        when(systemuserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSystemuserMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(systemuserServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSystemusersWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(systemuserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSystemuserMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(systemuserServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -301,6 +335,32 @@ class SystemuserResourceIT {
 
         // Get all the systemuserList where user equals to (userId + 1)
         defaultSystemuserShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByDepartmentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+        Department department;
+        if (TestUtil.findAll(em, Department.class).isEmpty()) {
+            department = DepartmentResourceIT.createEntity(em);
+            em.persist(department);
+            em.flush();
+        } else {
+            department = TestUtil.findAll(em, Department.class).get(0);
+        }
+        em.persist(department);
+        em.flush();
+        systemuser.addDepartment(department);
+        systemuserRepository.saveAndFlush(systemuser);
+        Long departmentId = department.getId();
+
+        // Get all the systemuserList where department equals to departmentId
+        defaultSystemuserShouldBeFound("departmentId.equals=" + departmentId);
+
+        // Get all the systemuserList where department equals to (departmentId + 1)
+        defaultSystemuserShouldNotBeFound("departmentId.equals=" + (departmentId + 1));
     }
 
     /**

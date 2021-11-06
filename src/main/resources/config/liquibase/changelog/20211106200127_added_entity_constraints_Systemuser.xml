@@ -13,5 +13,17 @@
                                  constraintName="fk_systemuser__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="systemuser_id"
+                                 baseTableName="rel_systemuser__department"
+                                 constraintName="fk_rel_systemuser__department__systemuser_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="systemuser"/>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="rel_systemuser__department"
+                                 constraintName="fk_rel_systemuser__department__department_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="department"/>
     </changeSet>
 </databaseChangeLog>

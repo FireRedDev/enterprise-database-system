@@ -34,6 +34,14 @@ public interface SystemuserService {
     Page<Systemuser> findAll(Pageable pageable);
 
     /**
+     * Get all the systemusers with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Systemuser> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" systemuser.
      *
      * @param id the id of the entity.

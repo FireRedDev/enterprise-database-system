@@ -94,6 +94,15 @@ public class SystemuserQueryService extends QueryService<Systemuser> {
                         buildSpecification(criteria.getUserId(), root -> root.join(Systemuser_.user, JoinType.LEFT).get(User_.id))
                     );
             }
+            if (criteria.getDepartmentId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepartmentId(),
+                            root -> root.join(Systemuser_.departments, JoinType.LEFT).get(Department_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

@@ -12,6 +12,8 @@ import { ISystemuser, Systemuser } from '../systemuser.model';
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
+import { IDepartment } from 'app/entities/department/department.model';
+import { DepartmentService } from 'app/entities/department/service/department.service';
 
 import { SystemuserUpdateComponent } from './systemuser-update.component';
 
@@ -21,6 +23,7 @@ describe('Systemuser Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let systemuserService: SystemuserService;
   let userService: UserService;
+  let departmentService: DepartmentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,6 +38,7 @@ describe('Systemuser Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     systemuserService = TestBed.inject(SystemuserService);
     userService = TestBed.inject(UserService);
+    departmentService = TestBed.inject(DepartmentService);
 
     comp = fixture.componentInstance;
   });
@@ -59,16 +63,38 @@ describe('Systemuser Management Update Component', () => {
       expect(comp.usersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Department query and add missing value', () => {
+      const systemuser: ISystemuser = { id: 456 };
+      const departments: IDepartment[] = [{ id: 72165 }];
+      systemuser.departments = departments;
+
+      const departmentCollection: IDepartment[] = [{ id: 12145 }];
+      jest.spyOn(departmentService, 'query').mockReturnValue(of(new HttpResponse({ body: departmentCollection })));
+      const additionalDepartments = [...departments];
+      const expectedCollection: IDepartment[] = [...additionalDepartments, ...departmentCollection];
+      jest.spyOn(departmentService, 'addDepartmentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ systemuser });
+      comp.ngOnInit();
+
+      expect(departmentService.query).toHaveBeenCalled();
+      expect(departmentService.addDepartmentToCollectionIfMissing).toHaveBeenCalledWith(departmentCollection, ...additionalDepartments);
+      expect(comp.departmentsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const systemuser: ISystemuser = { id: 456 };
       const user: IUser = { id: 15817 };
       systemuser.user = user;
+      const departments: IDepartment = { id: 83735 };
+      systemuser.departments = [departments];
 
       activatedRoute.data = of({ systemuser });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(systemuser));
       expect(comp.usersSharedCollection).toContain(user);
+      expect(comp.departmentsSharedCollection).toContain(departments);
     });
   });
 
@@ -142,6 +168,42 @@ describe('Systemuser Management Update Component', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackUserById(0, entity);
         expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDepartmentById', () => {
+      it('Should return tracked Department primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDepartmentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+  });
+
+  describe('Getting selected relationships', () => {
+    describe('getSelectedDepartment', () => {
+      it('Should return option if no Department is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedDepartment(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected Department for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedDepartment(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this Department is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedDepartment(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
       });
     });
   });
