@@ -18,10 +18,10 @@ spring:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
   application:
-    name: enterprisedatabasesystem
+    name: employeeonboardingsystem
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:enterprisedatabasesystem;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:employeeonboardingsystem;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     name:
     username:
     password:
@@ -57,24 +57,17 @@ spring:
     basename: i18n/messages
   task:
     execution:
-      thread-name-prefix: enterprisedatabasesystem-task-
+      thread-name-prefix: employeeonboardingsystem-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: enterprisedatabasesystem-scheduling-
+      thread-name-prefix: employeeonboardingsystem-scheduling-
       pool:
         size: 1
   thymeleaf:
     mode: HTML
-  # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
 
 server:
   port: 10344
@@ -88,7 +81,7 @@ server:
 
 jhipster:
   clientApp:
-    name: 'enterprisedatabasesystemApp'
+    name: 'employeeonboardingsystemApp'
   logging:
     # To test json console appender
     use-json-format: false
@@ -100,6 +93,10 @@ jhipster:
   mail:
     from: test@localhost
     base-url: http://127.0.0.1:8080
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: 999470b9deed95df2f14543d208e91952a7cd4ee802ba70ca9c00d2d01e7971e442f2a24e54cc4fb2488eea6e4650c9ef35b
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

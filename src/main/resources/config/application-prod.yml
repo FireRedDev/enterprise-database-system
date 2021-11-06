@@ -17,7 +17,7 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    at.jku.enterprisedatabasesystem: INFO
+    at.jku.employeeonboardingsystem: INFO
 
 management:
   metrics:
@@ -33,8 +33,8 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/enterprisedatabasesystem
-    username: enterprisedatabasesystem
+    url: jdbc:postgresql://localhost:5432/employeeonboardingsystem
+    username: employeeonboardingsystem
     password:
     hikari:
       poolName: Hikari
@@ -44,6 +44,11 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
   thymeleaf:
     cache: true
   sleuth:
@@ -58,7 +63,7 @@ spring:
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
-# keytool -genkey -alias enterprisedatabasesystem -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias employeeonboardingsystem -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -93,6 +98,12 @@ jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: 999470b9deed95df2f14543d208e91952a7cd4ee802ba70ca9c00d2d01e7971e442f2a24e54cc4fb2488eea6e4650c9ef35b
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://my-server-url-to-change # Modify according to your server's URL
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration

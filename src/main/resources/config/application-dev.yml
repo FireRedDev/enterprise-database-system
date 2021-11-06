@@ -18,7 +18,7 @@ logging:
     ROOT: DEBUG
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
-    at.jku.enterprisedatabasesystem: DEBUG
+    at.jku.employeeonboardingsystem: DEBUG
 
 spring:
   devtools:
@@ -32,8 +32,8 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:mem:enterprisedatabasesystem;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: enterprisedatabasesystem
+    url: jdbc:h2:mem:employeeonboardingsystem;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: employeeonboardingsystem
     password:
     hikari:
       poolName: Hikari
@@ -47,6 +47,11 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -77,9 +82,15 @@ jhipster:
     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,http://localhost:4200,https://localhost:4200'
     allowed-methods: '*'
     allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
+    exposed-headers: 'Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
     allow-credentials: true
     max-age: 1800
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: 999470b9deed95df2f14543d208e91952a7cd4ee802ba70ca9c00d2d01e7971e442f2a24e54cc4fb2488eea6e4650c9ef35b
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:8080
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration

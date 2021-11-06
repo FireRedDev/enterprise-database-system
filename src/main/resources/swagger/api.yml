@@ -2,7 +2,7 @@
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
 openapi: '3.0.1'
 info:
-  title: 'enterprisedatabasesystem'
+  title: 'employeeonboardingsystem'
   version: 0.0.1
 servers:
   - url: http://localhost:8080/api
@@ -20,21 +20,14 @@ components:
             $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
 
   securitySchemes:
-    oauth:
-      type: oauth2
-      description: OAuth2 authentication with KeyCloak
-      flows:
-        authorizationCode:
-          authorizationUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-          tokenUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
-          scopes:
-            jhipster: Jhipster specific claims
-            email: Email claims
-            profile: Profile claims
-    openId:
-      type: openIdConnect
-      description: OpenID Connect authentication with KeyCloak
-      openIdConnectUrl: http://localhost:9080/auth/realms/jhipster/.well-known/openid-configuration
+    sessionId:
+      type: apiKey
+      name: JSESSIONID
+      in: cookie
+    csrf:
+      type: apiKey
+      name: XSRF-TOKEN
+      in: cookie
 security:
-  - oauth: [jhipster, email, profile]
-  - openId: [jhipster, email, profile]
+  - sessionId: []
+  - csrf: []

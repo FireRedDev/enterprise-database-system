@@ -34,7 +34,7 @@ module.exports = async (config, options, targetOptions) => {
         extensions: ['js', 'ts'],
       }),
       new WebpackNotifierPlugin({
-        title: 'Enterprisedatabasesystem',
+        title: 'Employeeonboardingsystem',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       })
     );

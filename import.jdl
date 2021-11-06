@@ -1,0 +1,77 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType oauth2
+    baseName enterprisedatabasesystem
+    blueprints []
+    buildTool maven
+    cacheProvider no
+    clientFramework angularX
+    clientPackageManager npm
+    clientTheme none
+    creationTimestamp 1635506197869
+    databaseType sql
+    devDatabaseType h2Memory
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache false
+    enableSwaggerCodegen true
+    enableTranslation false
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "7.3.1"
+    languages [en, fr]
+    messageBroker false
+    nativeLanguage de
+    otherModules []
+    packageName at.jku.enterprisedatabasesystem
+    prodDatabaseType postgresql
+    reactive false
+    searchEngine false
+    serverPort 8080
+    serviceDiscoveryType no
+    skipClient false
+    skipServer false
+    skipUserManagement true
+    testFrameworks []
+    websocket false
+    withAdminUi true
+  }
+
+  entities Department, Employee, TargetSystem, TargetSystemCredentials
+}
+
+entity Department {
+  name String
+  location String
+  description String
+}
+entity Employee {
+  firstName String
+  lastName String
+  password String
+  birthDate LocalDate
+  entryDate LocalDate
+  isEmployed Boolean
+  email String
+}
+entity TargetSystem {
+  name String
+}
+entity TargetSystemCredentials {
+  username String required minlength(6)
+  password String required minlength(6)
+}
+relationship OneToOne {
+  TargetSystemCredentials{targetSystem(name)} to TargetSystem
+  TargetSystemCredentials{employee(lastName)} to Employee
+  TargetSystemCredentials{department(name)} to Department
+}
+relationship ManyToMany {
+  Department{targetSystem(name)} to TargetSystem
+  Employee{department(name)} to Department
+}
+
+paginate Department, Employee, TargetSystem, TargetSystemCredentials with pagination
+service Department, Employee, TargetSystem, TargetSystemCredentials with serviceImpl
+filter Department, Employee, TargetSystem, TargetSystemCredentials

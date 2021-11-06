@@ -1,0 +1,205 @@
+package at.jku.employeeonboardingsystem.web.rest;
+
+import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
+import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
+import at.jku.employeeonboardingsystem.service.SystemuserService;
+import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
+import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.ResponseUtil;
+
+/**
+ * REST controller for managing {@link at.jku.employeeonboardingsystem.domain.Systemuser}.
+ */
+@RestController
+@RequestMapping("/api")
+public class SystemuserResource {
+
+    private final Logger log = LoggerFactory.getLogger(SystemuserResource.class);
+
+    private static final String ENTITY_NAME = "systemuser";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
+
+    private final SystemuserService systemuserService;
+
+    private final SystemuserRepository systemuserRepository;
+
+    private final SystemuserQueryService systemuserQueryService;
+
+    public SystemuserResource(
+        SystemuserService systemuserService,
+        SystemuserRepository systemuserRepository,
+        SystemuserQueryService systemuserQueryService
+    ) {
+        this.systemuserService = systemuserService;
+        this.systemuserRepository = systemuserRepository;
+        this.systemuserQueryService = systemuserQueryService;
+    }
+
+    /**
+     * {@code POST  /systemusers} : Create a new systemuser.
+     *
+     * @param systemuser the systemuser to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new systemuser, or with status {@code 400 (Bad Request)} if the systemuser has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/systemusers")
+    public ResponseEntity<Systemuser> createSystemuser(@Valid @RequestBody Systemuser systemuser) throws URISyntaxException {
+        log.debug("REST request to save Systemuser : {}", systemuser);
+        if (systemuser.getId() != null) {
+            throw new BadRequestAlertException("A new systemuser cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Systemuser result = systemuserService.save(systemuser);
+        return ResponseEntity
+            .created(new URI("/api/systemusers/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code PUT  /systemusers/:id} : Updates an existing systemuser.
+     *
+     * @param id the id of the systemuser to save.
+     * @param systemuser the systemuser to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated systemuser,
+     * or with status {@code 400 (Bad Request)} if the systemuser is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the systemuser couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/systemusers/{id}")
+    public ResponseEntity<Systemuser> updateSystemuser(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Systemuser systemuser
+    ) throws URISyntaxException {
+        log.debug("REST request to update Systemuser : {}, {}", id, systemuser);
+        if (systemuser.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, systemuser.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!systemuserRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Systemuser result = systemuserService.save(systemuser);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, systemuser.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code PATCH  /systemusers/:id} : Partial updates given fields of an existing systemuser, field will ignore if it is null
+     *
+     * @param id the id of the systemuser to save.
+     * @param systemuser the systemuser to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated systemuser,
+     * or with status {@code 400 (Bad Request)} if the systemuser is not valid,
+     * or with status {@code 404 (Not Found)} if the systemuser is not found,
+     * or with status {@code 500 (Internal Server Error)} if the systemuser couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/systemusers/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<Systemuser> partialUpdateSystemuser(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Systemuser systemuser
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Systemuser partially : {}, {}", id, systemuser);
+        if (systemuser.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, systemuser.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!systemuserRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Systemuser> result = systemuserService.partialUpdate(systemuser);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, systemuser.getId().toString())
+        );
+    }
+
+    /**
+     * {@code GET  /systemusers} : get all the systemusers.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of systemusers in body.
+     */
+    @GetMapping("/systemusers")
+    public ResponseEntity<List<Systemuser>> getAllSystemusers(SystemuserCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Systemusers by criteria: {}", criteria);
+        Page<Systemuser> page = systemuserQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /systemusers/count} : count all the systemusers.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/systemusers/count")
+    public ResponseEntity<Long> countSystemusers(SystemuserCriteria criteria) {
+        log.debug("REST request to count Systemusers by criteria: {}", criteria);
+        return ResponseEntity.ok().body(systemuserQueryService.countByCriteria(criteria));
+    }
+
+    /**
+     * {@code GET  /systemusers/:id} : get the "id" systemuser.
+     *
+     * @param id the id of the systemuser to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the systemuser, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/systemusers/{id}")
+    public ResponseEntity<Systemuser> getSystemuser(@PathVariable Long id) {
+        log.debug("REST request to get Systemuser : {}", id);
+        Optional<Systemuser> systemuser = systemuserService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(systemuser);
+    }
+
+    /**
+     * {@code DELETE  /systemusers/:id} : delete the "id" systemuser.
+     *
+     * @param id the id of the systemuser to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/systemusers/{id}")
+    public ResponseEntity<Void> deleteSystemuser(@PathVariable Long id) {
+        log.debug("REST request to delete Systemuser : {}", id);
+        systemuserService.delete(id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .build();
+    }
+}

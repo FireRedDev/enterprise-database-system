@@ -1,7 +1,7 @@
 {
   "generator-jhipster:7.3.1": {
     "promptValues": {
-      "packageName": "at.jku.enterprisedatabasesystem",
+      "packageName": "at.jku.employeeonboardingsystem",
       "nativeLanguage": "de"
     }
   }

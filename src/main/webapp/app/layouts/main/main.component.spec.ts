@@ -49,7 +49,7 @@ describe('MainComponent', () => {
   });
 
   describe('page title', () => {
-    const defaultPageTitle = 'Enterprisedatabasesystem';
+    const defaultPageTitle = 'Employeeonboardingsystem';
     const parentRoutePageTitle = 'parentTitle';
     const childRoutePageTitle = 'childTitle';
     const navigationEnd = new NavigationEnd(1, '', '');

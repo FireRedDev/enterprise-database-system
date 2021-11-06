@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "fieldName": "entryDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "systemuser"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "no",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "Systemuser",
+  "changelogDate": "20211106200127"
+}

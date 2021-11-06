@@ -5,12 +5,12 @@
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>at.jku.enterprisedatabasesystem</groupId>
-    <artifactId>enterprisedatabasesystem</artifactId>
+    <groupId>at.jku.employeeonboardingsystem</groupId>
+    <artifactId>employeeonboardingsystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Enterprisedatabasesystem</name>
-    <description>Description for enterprisedatabasesystem</description>
+    <name>Employeeonboardingsystem</name>
+    <description>Description for employeeonboardingsystem</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -34,7 +34,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <start-class>at.jku.enterprisedatabasesystem.EnterprisedatabasesystemApp</start-class>
+        <start-class>at.jku.employeeonboardingsystem.EmployeeonboardingsystemApp</start-class>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
@@ -228,6 +228,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
@@ -272,15 +276,6 @@
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-web</artifactId>
-        </dependency>
-        <!-- Spring Security OAuth 2.0 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
         <!-- Spring Cloud -->
         <dependency>
@@ -596,7 +591,7 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>enterprisedatabasesystem:latest</image>
+                            <image>employeeonboardingsystem:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -635,13 +630,12 @@
                         <driver></driver>
                         <url></url>
                         <defaultSchemaName></defaultSchemaName>
-                        <username>enterprisedatabasesystem</username>
+                        <username>employeeonboardingsystem</username>
                         <password></password>
-                        <referenceUrl>hibernate:spring:at.jku.enterprisedatabasesystem.domain?dialect=&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <referenceUrl>hibernate:spring:at.jku.employeeonboardingsystem.domain?dialect=&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>
                         <contexts>!test</contexts>
-                        <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -829,14 +823,14 @@
                             <configuration>
                                 <inputSpec>${project.basedir}/src/main/resources/swagger/api.yml</inputSpec>
                                 <generatorName>spring</generatorName>
-                                <apiPackage>at.jku.enterprisedatabasesystem.web.api</apiPackage>
-                                <modelPackage>at.jku.enterprisedatabasesystem.service.api.dto</modelPackage>
+                                <apiPackage>at.jku.employeeonboardingsystem.web.api</apiPackage>
+                                <modelPackage>at.jku.employeeonboardingsystem.service.api.dto</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <importMappings>Problem=org.zalando.problem.Problem</importMappings>
                                 <skipValidateSpec>false</skipValidateSpec>
                                 <configOptions>
                                     <delegatePattern>true</delegatePattern>
-                                    <title>enterprisedatabasesystem</title>
+                                    <title>employeeonboardingsystem</title>
                                 </configOptions>
                             </configuration>
                         </execution>

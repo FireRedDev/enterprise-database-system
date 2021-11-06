@@ -16,13 +16,13 @@ export class AlertErrorComponent implements OnDestroy {
   httpErrorListener: Subscription;
 
   constructor(private alertService: AlertService, private eventManager: EventManager) {
-    this.errorListener = eventManager.subscribe('enterprisedatabasesystemApp.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = eventManager.subscribe('employeeonboardingsystemApp.error', (response: EventWithContent<unknown> | string) => {
       const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message);
     });
 
     this.httpErrorListener = eventManager.subscribe(
-      'enterprisedatabasesystemApp.httpError',
+      'employeeonboardingsystemApp.httpError',
       (response: EventWithContent<unknown> | string) => {
         const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
         switch (httpErrorResponse.status) {

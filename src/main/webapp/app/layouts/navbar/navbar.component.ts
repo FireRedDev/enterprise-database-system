@@ -43,7 +43,7 @@ export class NavbarComponent implements OnInit {
   }
 
   login(): void {
-    this.loginService.login();
+    this.router.navigate(['/login']);
   }
 
   logout(): void {

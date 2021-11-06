@@ -1,11 +1,11 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "enterprisedatabasesystem",
+    "baseName": "employeeonboardingsystem",
     "jhipsterVersion": "7.3.1",
     "skipClient": false,
     "skipServer": false,
-    "skipUserManagement": true,
+    "skipUserManagement": false,
     "skipCheckLengthOfIdentifier": false,
     "skipFakeData": false,
     "jhiPrefix": "jhi",
@@ -15,11 +15,11 @@
     "blueprints": [],
     "otherModules": [],
     "pages": [],
-    "creationTimestamp": 1635506197869,
+    "creationTimestamp": 1636228070046,
     "serviceDiscoveryType": "no",
     "reactive": false,
-    "authenticationType": "oauth2",
-    "packageName": "at.jku.enterprisedatabasesystem",
+    "authenticationType": "session",
+    "packageName": "at.jku.employeeonboardingsystem",
     "serverPort": "8080",
     "cacheProvider": "no",
     "enableHibernateCache": false,
@@ -37,12 +37,13 @@
     "clientTheme": "none",
     "enableTranslation": false,
     "nativeLanguage": "de",
+    "rememberMeKey": "999470b9deed95df2f14543d208e91952a7cd4ee802ba70ca9c00d2d01e7971e442f2a24e54cc4fb2488eea6e4650c9ef35b",
     "devServerPort": 4200,
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1635520498000,
-    "entities": ["TargetSystem", "Department", "Employee", "TargetSystemCredentials"]
+    "lastLiquibaseTimestamp": 1636228887000,
+    "entities": ["Systemuser"]
   }
 }
