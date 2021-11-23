@@ -88,6 +88,16 @@ public class SystemuserQueryService extends QueryService<Systemuser> {
             if (criteria.getEntryDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEntryDate(), Systemuser_.entryDate));
             }
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), Systemuser_.name));
+            }
+            if (criteria.getSocialSecurityNumber() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getSocialSecurityNumber(), Systemuser_.socialSecurityNumber));
+            }
+            if (criteria.getJobDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getJobDescription(), Systemuser_.jobDescription));
+            }
             if (criteria.getUserId() != null) {
                 specification =
                     specification.and(

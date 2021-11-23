@@ -1,3 +1,3 @@
-id;entry_date;user_id
-1;2021-11-06;1
-2;2021-11-06;2
+id;entry_date;name;social_security_number;job_description;user_id
+1;2021-11-06;bandwidth-monitored;sensor;navigate Generic Rustic;1
+2;2021-11-05;Äthiopien Forges;e-services Salad;Brandenburg Director;2

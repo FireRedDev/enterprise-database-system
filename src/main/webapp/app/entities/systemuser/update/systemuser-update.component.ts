@@ -25,6 +25,9 @@ export class SystemuserUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     entryDate: [],
+    name: [],
+    socialSecurityNumber: [],
+    jobDescription: [],
     user: [null, Validators.required],
     departments: [],
   });
@@ -101,6 +104,9 @@ export class SystemuserUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: systemuser.id,
       entryDate: systemuser.entryDate,
+      name: systemuser.name,
+      socialSecurityNumber: systemuser.socialSecurityNumber,
+      jobDescription: systemuser.jobDescription,
       user: systemuser.user,
       departments: systemuser.departments,
     });
@@ -135,6 +141,9 @@ export class SystemuserUpdateComponent implements OnInit {
       ...new Systemuser(),
       id: this.editForm.get(['id'])!.value,
       entryDate: this.editForm.get(['entryDate'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      socialSecurityNumber: this.editForm.get(['socialSecurityNumber'])!.value,
+      jobDescription: this.editForm.get(['jobDescription'])!.value,
       user: this.editForm.get(['user'])!.value,
       departments: this.editForm.get(['departments'])!.value,
     };

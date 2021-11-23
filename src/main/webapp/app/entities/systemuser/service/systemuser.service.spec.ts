@@ -26,6 +26,9 @@ describe('Systemuser Service', () => {
     elemDefault = {
       id: 0,
       entryDate: currentDate,
+      name: 'AAAAAAA',
+      socialSecurityNumber: 'AAAAAAA',
+      jobDescription: 'AAAAAAA',
     };
   });
 
@@ -73,6 +76,9 @@ describe('Systemuser Service', () => {
         {
           id: 1,
           entryDate: currentDate.format(DATE_FORMAT),
+          name: 'BBBBBB',
+          socialSecurityNumber: 'BBBBBB',
+          jobDescription: 'BBBBBB',
         },
         elemDefault
       );
@@ -120,6 +126,9 @@ describe('Systemuser Service', () => {
         {
           id: 1,
           entryDate: currentDate.format(DATE_FORMAT),
+          name: 'BBBBBB',
+          socialSecurityNumber: 'BBBBBB',
+          jobDescription: 'BBBBBB',
         },
         elemDefault
       );
@@ -176,7 +185,7 @@ describe('Systemuser Service', () => {
       });
 
       it('should add only unique Systemuser to an array', () => {
-        const systemuserArray: ISystemuser[] = [{ id: 123 }, { id: 456 }, { id: 22352 }];
+        const systemuserArray: ISystemuser[] = [{ id: 123 }, { id: 456 }, { id: 26340 }];
         const systemuserCollection: ISystemuser[] = [{ id: 123 }];
         expectedResult = service.addSystemuserToCollectionIfMissing(systemuserCollection, ...systemuserArray);
         expect(expectedResult).toHaveLength(3);

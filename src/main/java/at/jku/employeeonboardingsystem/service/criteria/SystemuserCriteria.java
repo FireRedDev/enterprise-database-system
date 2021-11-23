@@ -29,6 +29,12 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     private LocalDateFilter entryDate;
 
+    private StringFilter name;
+
+    private StringFilter socialSecurityNumber;
+
+    private StringFilter jobDescription;
+
     private LongFilter userId;
 
     private LongFilter departmentId;
@@ -40,6 +46,9 @@ public class SystemuserCriteria implements Serializable, Criteria {
     public SystemuserCriteria(SystemuserCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.entryDate = other.entryDate == null ? null : other.entryDate.copy();
+        this.name = other.name == null ? null : other.name.copy();
+        this.socialSecurityNumber = other.socialSecurityNumber == null ? null : other.socialSecurityNumber.copy();
+        this.jobDescription = other.jobDescription == null ? null : other.jobDescription.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.distinct = other.distinct;
@@ -78,6 +87,51 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     public void setEntryDate(LocalDateFilter entryDate) {
         this.entryDate = entryDate;
+    }
+
+    public StringFilter getName() {
+        return name;
+    }
+
+    public StringFilter name() {
+        if (name == null) {
+            name = new StringFilter();
+        }
+        return name;
+    }
+
+    public void setName(StringFilter name) {
+        this.name = name;
+    }
+
+    public StringFilter getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
+
+    public StringFilter socialSecurityNumber() {
+        if (socialSecurityNumber == null) {
+            socialSecurityNumber = new StringFilter();
+        }
+        return socialSecurityNumber;
+    }
+
+    public void setSocialSecurityNumber(StringFilter socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
+
+    public StringFilter getJobDescription() {
+        return jobDescription;
+    }
+
+    public StringFilter jobDescription() {
+        if (jobDescription == null) {
+            jobDescription = new StringFilter();
+        }
+        return jobDescription;
+    }
+
+    public void setJobDescription(StringFilter jobDescription) {
+        this.jobDescription = jobDescription;
     }
 
     public LongFilter getUserId() {
@@ -130,6 +184,9 @@ public class SystemuserCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(entryDate, that.entryDate) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(socialSecurityNumber, that.socialSecurityNumber) &&
+            Objects.equals(jobDescription, that.jobDescription) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(distinct, that.distinct)
@@ -138,7 +195,7 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entryDate, userId, departmentId, distinct);
+        return Objects.hash(id, entryDate, name, socialSecurityNumber, jobDescription, userId, departmentId, distinct);
     }
 
     // prettier-ignore
@@ -147,6 +204,9 @@ public class SystemuserCriteria implements Serializable, Criteria {
         return "SystemuserCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (entryDate != null ? "entryDate=" + entryDate + ", " : "") +
+            (name != null ? "name=" + name + ", " : "") +
+            (socialSecurityNumber != null ? "socialSecurityNumber=" + socialSecurityNumber + ", " : "") +
+            (jobDescription != null ? "jobDescription=" + jobDescription + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

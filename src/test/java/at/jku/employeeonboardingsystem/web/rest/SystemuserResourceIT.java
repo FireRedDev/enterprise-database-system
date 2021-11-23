@@ -48,6 +48,15 @@ class SystemuserResourceIT {
     private static final LocalDate UPDATED_ENTRY_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_ENTRY_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SOCIAL_SECURITY_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_SOCIAL_SECURITY_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_JOB_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_JOB_DESCRIPTION = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/systemusers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -78,7 +87,11 @@ class SystemuserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Systemuser createEntity(EntityManager em) {
-        Systemuser systemuser = new Systemuser().entryDate(DEFAULT_ENTRY_DATE);
+        Systemuser systemuser = new Systemuser()
+            .entryDate(DEFAULT_ENTRY_DATE)
+            .name(DEFAULT_NAME)
+            .socialSecurityNumber(DEFAULT_SOCIAL_SECURITY_NUMBER)
+            .jobDescription(DEFAULT_JOB_DESCRIPTION);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -94,7 +107,11 @@ class SystemuserResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Systemuser createUpdatedEntity(EntityManager em) {
-        Systemuser systemuser = new Systemuser().entryDate(UPDATED_ENTRY_DATE);
+        Systemuser systemuser = new Systemuser()
+            .entryDate(UPDATED_ENTRY_DATE)
+            .name(UPDATED_NAME)
+            .socialSecurityNumber(UPDATED_SOCIAL_SECURITY_NUMBER)
+            .jobDescription(UPDATED_JOB_DESCRIPTION);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -127,6 +144,9 @@ class SystemuserResourceIT {
         assertThat(systemuserList).hasSize(databaseSizeBeforeCreate + 1);
         Systemuser testSystemuser = systemuserList.get(systemuserList.size() - 1);
         assertThat(testSystemuser.getEntryDate()).isEqualTo(DEFAULT_ENTRY_DATE);
+        assertThat(testSystemuser.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testSystemuser.getSocialSecurityNumber()).isEqualTo(DEFAULT_SOCIAL_SECURITY_NUMBER);
+        assertThat(testSystemuser.getJobDescription()).isEqualTo(DEFAULT_JOB_DESCRIPTION);
     }
 
     @Test
@@ -164,7 +184,10 @@ class SystemuserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemuser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].entryDate").value(hasItem(DEFAULT_ENTRY_DATE.toString())));
+            .andExpect(jsonPath("$.[*].entryDate").value(hasItem(DEFAULT_ENTRY_DATE.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].socialSecurityNumber").value(hasItem(DEFAULT_SOCIAL_SECURITY_NUMBER)))
+            .andExpect(jsonPath("$.[*].jobDescription").value(hasItem(DEFAULT_JOB_DESCRIPTION)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -197,7 +220,10 @@ class SystemuserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(systemuser.getId().intValue()))
-            .andExpect(jsonPath("$.entryDate").value(DEFAULT_ENTRY_DATE.toString()));
+            .andExpect(jsonPath("$.entryDate").value(DEFAULT_ENTRY_DATE.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.socialSecurityNumber").value(DEFAULT_SOCIAL_SECURITY_NUMBER))
+            .andExpect(jsonPath("$.jobDescription").value(DEFAULT_JOB_DESCRIPTION));
     }
 
     @Test
@@ -324,6 +350,240 @@ class SystemuserResourceIT {
 
     @Test
     @Transactional
+    void getAllSystemusersByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name equals to DEFAULT_NAME
+        defaultSystemuserShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the systemuserList where name equals to UPDATED_NAME
+        defaultSystemuserShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name not equals to DEFAULT_NAME
+        defaultSystemuserShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the systemuserList where name not equals to UPDATED_NAME
+        defaultSystemuserShouldBeFound("name.notEquals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultSystemuserShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the systemuserList where name equals to UPDATED_NAME
+        defaultSystemuserShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name is not null
+        defaultSystemuserShouldBeFound("name.specified=true");
+
+        // Get all the systemuserList where name is null
+        defaultSystemuserShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByNameContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name contains DEFAULT_NAME
+        defaultSystemuserShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the systemuserList where name contains UPDATED_NAME
+        defaultSystemuserShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where name does not contain DEFAULT_NAME
+        defaultSystemuserShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the systemuserList where name does not contain UPDATED_NAME
+        defaultSystemuserShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber equals to DEFAULT_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldBeFound("socialSecurityNumber.equals=" + DEFAULT_SOCIAL_SECURITY_NUMBER);
+
+        // Get all the systemuserList where socialSecurityNumber equals to UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.equals=" + UPDATED_SOCIAL_SECURITY_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber not equals to DEFAULT_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.notEquals=" + DEFAULT_SOCIAL_SECURITY_NUMBER);
+
+        // Get all the systemuserList where socialSecurityNumber not equals to UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldBeFound("socialSecurityNumber.notEquals=" + UPDATED_SOCIAL_SECURITY_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberIsInShouldWork() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber in DEFAULT_SOCIAL_SECURITY_NUMBER or UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldBeFound("socialSecurityNumber.in=" + DEFAULT_SOCIAL_SECURITY_NUMBER + "," + UPDATED_SOCIAL_SECURITY_NUMBER);
+
+        // Get all the systemuserList where socialSecurityNumber equals to UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.in=" + UPDATED_SOCIAL_SECURITY_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber is not null
+        defaultSystemuserShouldBeFound("socialSecurityNumber.specified=true");
+
+        // Get all the systemuserList where socialSecurityNumber is null
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber contains DEFAULT_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldBeFound("socialSecurityNumber.contains=" + DEFAULT_SOCIAL_SECURITY_NUMBER);
+
+        // Get all the systemuserList where socialSecurityNumber contains UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.contains=" + UPDATED_SOCIAL_SECURITY_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersBySocialSecurityNumberNotContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where socialSecurityNumber does not contain DEFAULT_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldNotBeFound("socialSecurityNumber.doesNotContain=" + DEFAULT_SOCIAL_SECURITY_NUMBER);
+
+        // Get all the systemuserList where socialSecurityNumber does not contain UPDATED_SOCIAL_SECURITY_NUMBER
+        defaultSystemuserShouldBeFound("socialSecurityNumber.doesNotContain=" + UPDATED_SOCIAL_SECURITY_NUMBER);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription equals to DEFAULT_JOB_DESCRIPTION
+        defaultSystemuserShouldBeFound("jobDescription.equals=" + DEFAULT_JOB_DESCRIPTION);
+
+        // Get all the systemuserList where jobDescription equals to UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldNotBeFound("jobDescription.equals=" + UPDATED_JOB_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription not equals to DEFAULT_JOB_DESCRIPTION
+        defaultSystemuserShouldNotBeFound("jobDescription.notEquals=" + DEFAULT_JOB_DESCRIPTION);
+
+        // Get all the systemuserList where jobDescription not equals to UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldBeFound("jobDescription.notEquals=" + UPDATED_JOB_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription in DEFAULT_JOB_DESCRIPTION or UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldBeFound("jobDescription.in=" + DEFAULT_JOB_DESCRIPTION + "," + UPDATED_JOB_DESCRIPTION);
+
+        // Get all the systemuserList where jobDescription equals to UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldNotBeFound("jobDescription.in=" + UPDATED_JOB_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription is not null
+        defaultSystemuserShouldBeFound("jobDescription.specified=true");
+
+        // Get all the systemuserList where jobDescription is null
+        defaultSystemuserShouldNotBeFound("jobDescription.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription contains DEFAULT_JOB_DESCRIPTION
+        defaultSystemuserShouldBeFound("jobDescription.contains=" + DEFAULT_JOB_DESCRIPTION);
+
+        // Get all the systemuserList where jobDescription contains UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldNotBeFound("jobDescription.contains=" + UPDATED_JOB_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllSystemusersByJobDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        systemuserRepository.saveAndFlush(systemuser);
+
+        // Get all the systemuserList where jobDescription does not contain DEFAULT_JOB_DESCRIPTION
+        defaultSystemuserShouldNotBeFound("jobDescription.doesNotContain=" + DEFAULT_JOB_DESCRIPTION);
+
+        // Get all the systemuserList where jobDescription does not contain UPDATED_JOB_DESCRIPTION
+        defaultSystemuserShouldBeFound("jobDescription.doesNotContain=" + UPDATED_JOB_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
     void getAllSystemusersByUserIsEqualToSomething() throws Exception {
         // Get already existing entity
         User user = systemuser.getUser();
@@ -372,7 +632,10 @@ class SystemuserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(systemuser.getId().intValue())))
-            .andExpect(jsonPath("$.[*].entryDate").value(hasItem(DEFAULT_ENTRY_DATE.toString())));
+            .andExpect(jsonPath("$.[*].entryDate").value(hasItem(DEFAULT_ENTRY_DATE.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].socialSecurityNumber").value(hasItem(DEFAULT_SOCIAL_SECURITY_NUMBER)))
+            .andExpect(jsonPath("$.[*].jobDescription").value(hasItem(DEFAULT_JOB_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restSystemuserMockMvc
@@ -420,7 +683,11 @@ class SystemuserResourceIT {
         Systemuser updatedSystemuser = systemuserRepository.findById(systemuser.getId()).get();
         // Disconnect from session so that the updates on updatedSystemuser are not directly saved in db
         em.detach(updatedSystemuser);
-        updatedSystemuser.entryDate(UPDATED_ENTRY_DATE);
+        updatedSystemuser
+            .entryDate(UPDATED_ENTRY_DATE)
+            .name(UPDATED_NAME)
+            .socialSecurityNumber(UPDATED_SOCIAL_SECURITY_NUMBER)
+            .jobDescription(UPDATED_JOB_DESCRIPTION);
 
         restSystemuserMockMvc
             .perform(
@@ -436,6 +703,9 @@ class SystemuserResourceIT {
         assertThat(systemuserList).hasSize(databaseSizeBeforeUpdate);
         Systemuser testSystemuser = systemuserList.get(systemuserList.size() - 1);
         assertThat(testSystemuser.getEntryDate()).isEqualTo(UPDATED_ENTRY_DATE);
+        assertThat(testSystemuser.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testSystemuser.getSocialSecurityNumber()).isEqualTo(UPDATED_SOCIAL_SECURITY_NUMBER);
+        assertThat(testSystemuser.getJobDescription()).isEqualTo(UPDATED_JOB_DESCRIPTION);
     }
 
     @Test
@@ -529,6 +799,9 @@ class SystemuserResourceIT {
         assertThat(systemuserList).hasSize(databaseSizeBeforeUpdate);
         Systemuser testSystemuser = systemuserList.get(systemuserList.size() - 1);
         assertThat(testSystemuser.getEntryDate()).isEqualTo(UPDATED_ENTRY_DATE);
+        assertThat(testSystemuser.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testSystemuser.getSocialSecurityNumber()).isEqualTo(DEFAULT_SOCIAL_SECURITY_NUMBER);
+        assertThat(testSystemuser.getJobDescription()).isEqualTo(DEFAULT_JOB_DESCRIPTION);
     }
 
     @Test
@@ -543,7 +816,11 @@ class SystemuserResourceIT {
         Systemuser partialUpdatedSystemuser = new Systemuser();
         partialUpdatedSystemuser.setId(systemuser.getId());
 
-        partialUpdatedSystemuser.entryDate(UPDATED_ENTRY_DATE);
+        partialUpdatedSystemuser
+            .entryDate(UPDATED_ENTRY_DATE)
+            .name(UPDATED_NAME)
+            .socialSecurityNumber(UPDATED_SOCIAL_SECURITY_NUMBER)
+            .jobDescription(UPDATED_JOB_DESCRIPTION);
 
         restSystemuserMockMvc
             .perform(
@@ -559,6 +836,9 @@ class SystemuserResourceIT {
         assertThat(systemuserList).hasSize(databaseSizeBeforeUpdate);
         Systemuser testSystemuser = systemuserList.get(systemuserList.size() - 1);
         assertThat(testSystemuser.getEntryDate()).isEqualTo(UPDATED_ENTRY_DATE);
+        assertThat(testSystemuser.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testSystemuser.getSocialSecurityNumber()).isEqualTo(UPDATED_SOCIAL_SECURITY_NUMBER);
+        assertThat(testSystemuser.getJobDescription()).isEqualTo(UPDATED_JOB_DESCRIPTION);
     }
 
     @Test

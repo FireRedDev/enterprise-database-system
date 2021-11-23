@@ -17,6 +17,15 @@
             <column name="entry_date" type="date">
                 <constraints nullable="true" />
             </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="social_security_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="job_description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_systemuser__user_id" />
             </column>
@@ -56,6 +65,9 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="entry_date" type="date"/>
+            <column name="name" type="string"/>
+            <column name="social_security_number" type="string"/>
+            <column name="job_description" type="string"/>
             <column name="user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

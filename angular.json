@@ -108,6 +108,7 @@
   },
   "defaultProject": "employeeonboardingsystem",
   "cli": {
+    "analytics": false,
     "packageManager": "npm"
   }
 }

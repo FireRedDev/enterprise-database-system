@@ -34,6 +34,9 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="entryDate"><span>Entry Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="socialSecurityNumber"><span>Social Security Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="jobDescription"><span>Job Description</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="user.login"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -44,6 +47,9 @@
             <a [routerLink]="['/systemuser', systemuser.id, 'view']">{{ systemuser.id }}</a>
           </td>
           <td>{{ systemuser.entryDate | formatMediumDate }}</td>
+          <td>{{ systemuser.name }}</td>
+          <td>{{ systemuser.socialSecurityNumber }}</td>
+          <td>{{ systemuser.jobDescription }}</td>
           <td>
             {{ systemuser.user?.login }}
           </td>

@@ -42,6 +42,15 @@ public class SystemuserServiceImpl implements SystemuserService {
                 if (systemuser.getEntryDate() != null) {
                     existingSystemuser.setEntryDate(systemuser.getEntryDate());
                 }
+                if (systemuser.getName() != null) {
+                    existingSystemuser.setName(systemuser.getName());
+                }
+                if (systemuser.getSocialSecurityNumber() != null) {
+                    existingSystemuser.setSocialSecurityNumber(systemuser.getSocialSecurityNumber());
+                }
+                if (systemuser.getJobDescription() != null) {
+                    existingSystemuser.setJobDescription(systemuser.getJobDescription());
+                }
 
                 return existingSystemuser;
             })

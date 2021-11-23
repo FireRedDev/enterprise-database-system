@@ -26,6 +26,15 @@ public class Systemuser implements Serializable {
     @Column(name = "entry_date")
     private LocalDate entryDate;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "social_security_number")
+    private String socialSecurityNumber;
+
+    @Column(name = "job_description")
+    private String jobDescription;
+
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
@@ -66,6 +75,45 @@ public class Systemuser implements Serializable {
 
     public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Systemuser name(String name) {
+        this.setName(name);
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSocialSecurityNumber() {
+        return this.socialSecurityNumber;
+    }
+
+    public Systemuser socialSecurityNumber(String socialSecurityNumber) {
+        this.setSocialSecurityNumber(socialSecurityNumber);
+        return this;
+    }
+
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
+
+    public String getJobDescription() {
+        return this.jobDescription;
+    }
+
+    public Systemuser jobDescription(String jobDescription) {
+        this.setJobDescription(jobDescription);
+        return this;
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
     }
 
     public User getUser() {
@@ -129,6 +177,9 @@ public class Systemuser implements Serializable {
         return "Systemuser{" +
             "id=" + getId() +
             ", entryDate='" + getEntryDate() + "'" +
+            ", name='" + getName() + "'" +
+            ", socialSecurityNumber='" + getSocialSecurityNumber() + "'" +
+            ", jobDescription='" + getJobDescription() + "'" +
             "}";
     }
 }

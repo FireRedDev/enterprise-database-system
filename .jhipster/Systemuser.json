@@ -3,6 +3,20 @@
     {
       "fieldName": "entryDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "socialSecurityNumber",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "jobDescription",
+      "fieldType": "String"
     }
   ],
   "relationships": [
