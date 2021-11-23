@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import at.jku.employeeonboardingsystem.IntegrationTest;
 import at.jku.employeeonboardingsystem.domain.Department;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
-import at.jku.employeeonboardingsystem.domain.User;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
@@ -92,11 +91,6 @@ class SystemuserResourceIT {
             .name(DEFAULT_NAME)
             .socialSecurityNumber(DEFAULT_SOCIAL_SECURITY_NUMBER)
             .jobDescription(DEFAULT_JOB_DESCRIPTION);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        systemuser.setUser(user);
         return systemuser;
     }
 
@@ -112,11 +106,6 @@ class SystemuserResourceIT {
             .name(UPDATED_NAME)
             .socialSecurityNumber(UPDATED_SOCIAL_SECURITY_NUMBER)
             .jobDescription(UPDATED_JOB_DESCRIPTION);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        systemuser.setUser(user);
         return systemuser;
     }
 
@@ -580,21 +569,6 @@ class SystemuserResourceIT {
 
         // Get all the systemuserList where jobDescription does not contain UPDATED_JOB_DESCRIPTION
         defaultSystemuserShouldBeFound("jobDescription.doesNotContain=" + UPDATED_JOB_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    void getAllSystemusersByUserIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        User user = systemuser.getUser();
-        systemuserRepository.saveAndFlush(systemuser);
-        Long userId = user.getId();
-
-        // Get all the systemuserList where user equals to userId
-        defaultSystemuserShouldBeFound("userId.equals=" + userId);
-
-        // Get all the systemuserList where user equals to (userId + 1)
-        defaultSystemuserShouldNotBeFound("userId.equals=" + (userId + 1));
     }
 
     @Test

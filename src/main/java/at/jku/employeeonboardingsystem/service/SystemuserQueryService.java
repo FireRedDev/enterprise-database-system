@@ -98,12 +98,6 @@ public class SystemuserQueryService extends QueryService<Systemuser> {
             if (criteria.getJobDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getJobDescription(), Systemuser_.jobDescription));
             }
-            if (criteria.getUserId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getUserId(), root -> root.join(Systemuser_.user, JoinType.LEFT).get(User_.id))
-                    );
-            }
             if (criteria.getDepartmentId() != null) {
                 specification =
                     specification.and(

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 /**
  * A Systemuser.
@@ -34,11 +33,6 @@ public class Systemuser implements Serializable {
 
     @Column(name = "job_description")
     private String jobDescription;
-
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private User user;
 
     @ManyToMany
     @JoinTable(
@@ -114,19 +108,6 @@ public class Systemuser implements Serializable {
 
     public void setJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Systemuser user(User user) {
-        this.setUser(user);
-        return this;
     }
 
     public Set<Department> getDepartments() {

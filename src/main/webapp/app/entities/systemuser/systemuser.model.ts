@@ -1,5 +1,4 @@
 import * as dayjs from 'dayjs';
-import { IUser } from 'app/entities/user/user.model';
 import { IDepartment } from 'app/entities/department/department.model';
 
 export interface ISystemuser {
@@ -8,7 +7,6 @@ export interface ISystemuser {
   name?: string | null;
   socialSecurityNumber?: string | null;
   jobDescription?: string | null;
-  user?: IUser;
   departments?: IDepartment[] | null;
 }
 
@@ -19,7 +17,6 @@ export class Systemuser implements ISystemuser {
     public name?: string | null,
     public socialSecurityNumber?: string | null,
     public jobDescription?: string | null,
-    public user?: IUser,
     public departments?: IDepartment[] | null
   ) {}
 }

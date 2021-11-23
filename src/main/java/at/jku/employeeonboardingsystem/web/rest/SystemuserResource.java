@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +63,7 @@ public class SystemuserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/systemusers")
-    public ResponseEntity<Systemuser> createSystemuser(@Valid @RequestBody Systemuser systemuser) throws URISyntaxException {
+    public ResponseEntity<Systemuser> createSystemuser(@RequestBody Systemuser systemuser) throws URISyntaxException {
         log.debug("REST request to save Systemuser : {}", systemuser);
         if (systemuser.getId() != null) {
             throw new BadRequestAlertException("A new systemuser cannot already have an ID", ENTITY_NAME, "idexists");
@@ -90,7 +88,7 @@ public class SystemuserResource {
     @PutMapping("/systemusers/{id}")
     public ResponseEntity<Systemuser> updateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Systemuser systemuser
+        @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to update Systemuser : {}, {}", id, systemuser);
         if (systemuser.getId() == null) {
@@ -125,7 +123,7 @@ public class SystemuserResource {
     @PatchMapping(value = "/systemusers/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Systemuser> partialUpdateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Systemuser systemuser
+        @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to partial update Systemuser partially : {}, {}", id, systemuser);
         if (systemuser.getId() == null) {

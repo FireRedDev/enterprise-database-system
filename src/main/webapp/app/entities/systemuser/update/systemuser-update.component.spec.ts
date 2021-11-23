@@ -9,9 +9,6 @@ import { of, Subject } from 'rxjs';
 
 import { SystemuserService } from '../service/systemuser.service';
 import { ISystemuser, Systemuser } from '../systemuser.model';
-
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
 import { IDepartment } from 'app/entities/department/department.model';
 import { DepartmentService } from 'app/entities/department/service/department.service';
 
@@ -22,7 +19,6 @@ describe('Systemuser Management Update Component', () => {
   let fixture: ComponentFixture<SystemuserUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let systemuserService: SystemuserService;
-  let userService: UserService;
   let departmentService: DepartmentService;
 
   beforeEach(() => {
@@ -37,32 +33,12 @@ describe('Systemuser Management Update Component', () => {
     fixture = TestBed.createComponent(SystemuserUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     systemuserService = TestBed.inject(SystemuserService);
-    userService = TestBed.inject(UserService);
     departmentService = TestBed.inject(DepartmentService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call User query and add missing value', () => {
-      const systemuser: ISystemuser = { id: 456 };
-      const user: IUser = { id: 54566 };
-      systemuser.user = user;
-
-      const userCollection: IUser[] = [{ id: 6789 }];
-      jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [user];
-      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
-      jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ systemuser });
-      comp.ngOnInit();
-
-      expect(userService.query).toHaveBeenCalled();
-      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(userCollection, ...additionalUsers);
-      expect(comp.usersSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should call Department query and add missing value', () => {
       const systemuser: ISystemuser = { id: 456 };
       const departments: IDepartment[] = [{ id: 72165 }];
@@ -84,8 +60,6 @@ describe('Systemuser Management Update Component', () => {
 
     it('Should update editForm', () => {
       const systemuser: ISystemuser = { id: 456 };
-      const user: IUser = { id: 15817 };
-      systemuser.user = user;
       const departments: IDepartment = { id: 83735 };
       systemuser.departments = [departments];
 
@@ -93,7 +67,6 @@ describe('Systemuser Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(systemuser));
-      expect(comp.usersSharedCollection).toContain(user);
       expect(comp.departmentsSharedCollection).toContain(departments);
     });
   });
@@ -163,14 +136,6 @@ describe('Systemuser Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackUserById', () => {
-      it('Should return tracked User primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackUserById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-
     describe('trackDepartmentById', () => {
       it('Should return tracked Department primary key', () => {
         const entity = { id: 123 };
