@@ -1,8 +1,11 @@
 package at.jku.employeeonboardingsystem.service.impl;
 
 import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
+import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
+import java.io.Console;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +25,25 @@ public class SystemuserServiceImpl implements SystemuserService {
 
     private final SystemuserRepository systemuserRepository;
 
-    public SystemuserServiceImpl(SystemuserRepository systemuserRepository) {
+    private final TargetsystemcredentialsRepository targetsystemcredentialsRepository;
+
+    public SystemuserServiceImpl(
+        SystemuserRepository systemuserRepository,
+        TargetsystemcredentialsRepository targetsystemcredentialsRepository
+    ) {
         this.systemuserRepository = systemuserRepository;
+        this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
     }
 
     @Override
     public Systemuser save(Systemuser systemuser) {
         log.debug("Request to save Systemuser : {}", systemuser);
+        Targetsystemcredentials targetsystemcredentials = new Targetsystemcredentials();
+        targetsystemcredentials.setSystemuser(systemuser);
+        targetsystemcredentials.setUsername("test");
+        targetsystemcredentials.setPassword("test1");
+        log.debug("request to save credentials: {}", targetsystemcredentials);
+        //  targetsystemcredentialsRepository.save(targetsystemcredentials);
         return systemuserRepository.save(systemuser);
     }
 
