@@ -1,7 +1,9 @@
 package at.jku.employeeonboardingsystem.web.rest;
 
 import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
+import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
 import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsQueryService;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsService;
@@ -64,15 +66,23 @@ public class TargetsystemcredentialsResource {
     public TargetsystemcredentialsResource(
         TargetsystemcredentialsService targetsystemcredentialsService,
         TargetsystemcredentialsRepository targetsystemcredentialsRepository,
-        TargetsystemcredentialsQueryService targetsystemcredentialsQueryService
+        TargetsystemcredentialsQueryService targetsystemcredentialsQueryService,
+        TargetsystemRepository targetsystemRepository
     ) {
         this.targetsystemcredentialsService = targetsystemcredentialsService;
         this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
         this.targetsystemcredentialsQueryService = targetsystemcredentialsQueryService;
     }
 
-    @GetMapping("/targetsystemcredentials/csv")
-    public void getCSV(HttpServletResponse response) throws IOException {
+    /**
+ * {@code GET  /targetsystemcredentials/csv/{id}} : get all the targetsystemcredentials for one targetsystem.
+     *
+     * @param response.
+     * @param id the id of the targetsystem
+     
+ */
+    @GetMapping("/targetsystemcredentials/csv/{id}")
+    public void getCSV(@PathVariable long id, HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -90,7 +100,7 @@ public class TargetsystemcredentialsResource {
         csvWriter.writeHeader(csvHeader);
 
         for (Targetsystemcredentials c : listCredentials) {
-            csvWriter.write(c, nameMapping);
+            if (c.getTargetsystem().getId().equals(id)) csvWriter.write(c, nameMapping);
         }
 
         csvWriter.close();

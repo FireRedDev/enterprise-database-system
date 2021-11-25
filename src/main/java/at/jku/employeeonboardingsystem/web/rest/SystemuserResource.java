@@ -63,7 +63,7 @@ public class SystemuserResource {
         this.systemuserQueryService = systemuserQueryService;
     }
 
-    @GetMapping("/csvExport")
+    @GetMapping("/users/csv")
     public void getCSV(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
