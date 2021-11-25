@@ -9,7 +9,6 @@ import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsReposit
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import java.io.Console;
 import java.util.*;
-import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.detDSA;
 import org.slf4j.Logger;
@@ -122,5 +121,11 @@ public class SystemuserServiceImpl implements SystemuserService {
         List<Targetsystemcredentials> cre = targetsystemcredentialsRepository.findBySystemuser(systemuser);
         cre.forEach(c -> targetsystemcredentialsRepository.delete(c));
         systemuserRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Systemuser> listAll() {
+        // TODO Auto-generated method stub
+        return systemuserRepository.findAll();
     }
 }

@@ -6,11 +6,16 @@ import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +26,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -53,6 +61,31 @@ public class SystemuserResource {
         this.systemuserService = systemuserService;
         this.systemuserRepository = systemuserRepository;
         this.systemuserQueryService = systemuserQueryService;
+    }
+
+    @GetMapping("/csvExport")
+    public void getCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<Systemuser> listUsers = systemuserService.listAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "User ID", "Name", "Social Security Number", "Job Description" };
+        String[] nameMapping = { "id", "name", "socialSecurityNumber", "jobDescription" };
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (Systemuser user : listUsers) {
+            csvWriter.write(user, nameMapping);
+        }
+
+        csvWriter.close();
     }
 
     /**
