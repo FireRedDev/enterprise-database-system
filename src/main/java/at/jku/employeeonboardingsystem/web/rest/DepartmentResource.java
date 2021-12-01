@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -65,6 +66,7 @@ public class DepartmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/departments")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Department> createDepartment(@Valid @RequestBody Department department) throws URISyntaxException {
         log.debug("REST request to save Department : {}", department);
         if (department.getId() != null) {
@@ -88,6 +90,7 @@ public class DepartmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/departments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Department> updateDepartment(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Department department
@@ -123,6 +126,7 @@ public class DepartmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/departments/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Department> partialUpdateDepartment(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Department department
@@ -155,6 +159,7 @@ public class DepartmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of departments in body.
      */
     @GetMapping("/departments")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<List<Department>> getAllDepartments(DepartmentCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Departments by criteria: {}", criteria);
         Page<Department> page = departmentQueryService.findByCriteria(criteria, pageable);
@@ -169,6 +174,7 @@ public class DepartmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/departments/count")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Long> countDepartments(DepartmentCriteria criteria) {
         log.debug("REST request to count Departments by criteria: {}", criteria);
         return ResponseEntity.ok().body(departmentQueryService.countByCriteria(criteria));
@@ -181,6 +187,7 @@ public class DepartmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the department, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/departments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Department> getDepartment(@PathVariable Long id) {
         log.debug("REST request to get Department : {}", id);
         Optional<Department> department = departmentService.findOne(id);
@@ -194,6 +201,7 @@ public class DepartmentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/departments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         log.debug("REST request to delete Department : {}", id);
         departmentService.delete(id);

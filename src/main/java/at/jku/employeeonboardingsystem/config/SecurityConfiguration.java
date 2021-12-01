@@ -116,6 +116,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .deny()
         .and()
             .authorizeRequests()
+            .antMatchers("/systemuser").hasAuthority(AuthoritiesConstants.HR)
+            .antMatchers("/department").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()

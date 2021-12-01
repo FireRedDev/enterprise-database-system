@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.supercsv.io.CsvBeanWriter;
@@ -64,6 +65,7 @@ public class SystemuserResource {
     }
 
     @GetMapping("/users/csv")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public void getCSV(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
@@ -96,6 +98,7 @@ public class SystemuserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/systemusers")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Systemuser> createSystemuser(@RequestBody Systemuser systemuser) throws URISyntaxException {
         log.debug("REST request to save Systemuser : {}", systemuser);
         if (systemuser.getId() != null) {
@@ -119,6 +122,7 @@ public class SystemuserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/systemusers/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Systemuser> updateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Systemuser systemuser
@@ -154,6 +158,7 @@ public class SystemuserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/systemusers/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Systemuser> partialUpdateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Systemuser systemuser
@@ -186,6 +191,7 @@ public class SystemuserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of systemusers in body.
      */
     @GetMapping("/systemusers")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<List<Systemuser>> getAllSystemusers(SystemuserCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Systemusers by criteria: {}", criteria);
         Page<Systemuser> page = systemuserQueryService.findByCriteria(criteria, pageable);
@@ -199,7 +205,9 @@ public class SystemuserResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
+
     @GetMapping("/systemusers/count")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Long> countSystemusers(SystemuserCriteria criteria) {
         log.debug("REST request to count Systemusers by criteria: {}", criteria);
         return ResponseEntity.ok().body(systemuserQueryService.countByCriteria(criteria));
@@ -212,6 +220,7 @@ public class SystemuserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the systemuser, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/systemusers/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Systemuser> getSystemuser(@PathVariable Long id) {
         log.debug("REST request to get Systemuser : {}", id);
         Optional<Systemuser> systemuser = systemuserService.findOne(id);
@@ -225,6 +234,7 @@ public class SystemuserResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/systemusers/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Void> deleteSystemuser(@PathVariable Long id) {
         log.debug("REST request to delete Systemuser : {}", id);
         systemuserService.delete(id);

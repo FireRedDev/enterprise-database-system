@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -63,6 +64,7 @@ public class TargetsystemResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/targetsystems")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<Targetsystem> createTargetsystem(@RequestBody Targetsystem targetsystem) throws URISyntaxException {
         log.debug("REST request to save Targetsystem : {}", targetsystem);
         if (targetsystem.getId() != null) {
@@ -86,6 +88,7 @@ public class TargetsystemResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/targetsystems/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<Targetsystem> updateTargetsystem(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Targetsystem targetsystem
@@ -121,6 +124,7 @@ public class TargetsystemResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/targetsystems/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<Targetsystem> partialUpdateTargetsystem(
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Targetsystem targetsystem
@@ -153,6 +157,7 @@ public class TargetsystemResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of targetsystems in body.
      */
     @GetMapping("/targetsystems")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<List<Targetsystem>> getAllTargetsystems(TargetsystemCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Targetsystems by criteria: {}", criteria);
         Page<Targetsystem> page = targetsystemQueryService.findByCriteria(criteria, pageable);
@@ -167,6 +172,7 @@ public class TargetsystemResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/targetsystems/count")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<Long> countTargetsystems(TargetsystemCriteria criteria) {
         log.debug("REST request to count Targetsystems by criteria: {}", criteria);
         return ResponseEntity.ok().body(targetsystemQueryService.countByCriteria(criteria));
@@ -192,6 +198,7 @@ public class TargetsystemResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/targetsystems/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_IT')")
     public ResponseEntity<Void> deleteTargetsystem(@PathVariable Long id) {
         log.debug("REST request to delete Targetsystem : {}", id);
         targetsystemService.delete(id);
