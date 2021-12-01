@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { ISystemuser, Systemuser } from '../systemuser.model';
 import { SystemuserService } from '../service/systemuser.service';
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
 import { IDepartment } from 'app/entities/department/department.model';
 import { DepartmentService } from 'app/entities/department/service/department.service';
 
@@ -19,7 +17,6 @@ import { DepartmentService } from 'app/entities/department/service/department.se
 export class SystemuserUpdateComponent implements OnInit {
   isSaving = false;
 
-  usersSharedCollection: IUser[] = [];
   departmentsSharedCollection: IDepartment[] = [];
 
   editForm = this.fb.group({
@@ -28,13 +25,11 @@ export class SystemuserUpdateComponent implements OnInit {
     name: [],
     socialSecurityNumber: [],
     jobDescription: [],
-    user: [null, Validators.required],
     departments: [],
   });
 
   constructor(
     protected systemuserService: SystemuserService,
-    protected userService: UserService,
     protected departmentService: DepartmentService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -60,10 +55,6 @@ export class SystemuserUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.systemuserService.create(systemuser));
     }
-  }
-
-  trackUserById(index: number, item: IUser): number {
-    return item.id!;
   }
 
   trackDepartmentById(index: number, item: IDepartment): number {
@@ -107,11 +98,9 @@ export class SystemuserUpdateComponent implements OnInit {
       name: systemuser.name,
       socialSecurityNumber: systemuser.socialSecurityNumber,
       jobDescription: systemuser.jobDescription,
-      user: systemuser.user,
       departments: systemuser.departments,
     });
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, systemuser.user);
     this.departmentsSharedCollection = this.departmentService.addDepartmentToCollectionIfMissing(
       this.departmentsSharedCollection,
       ...(systemuser.departments ?? [])
@@ -119,12 +108,6 @@ export class SystemuserUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.userService
-      .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('user')!.value)))
-      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
-
     this.departmentService
       .query()
       .pipe(map((res: HttpResponse<IDepartment[]>) => res.body ?? []))
@@ -144,7 +127,6 @@ export class SystemuserUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       socialSecurityNumber: this.editForm.get(['socialSecurityNumber'])!.value,
       jobDescription: this.editForm.get(['jobDescription'])!.value,
-      user: this.editForm.get(['user'])!.value,
       departments: this.editForm.get(['departments'])!.value,
     };
   }

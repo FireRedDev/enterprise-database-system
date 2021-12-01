@@ -6,13 +6,16 @@ import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +26,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -57,6 +63,31 @@ public class SystemuserResource {
         this.systemuserQueryService = systemuserQueryService;
     }
 
+    @GetMapping("/users/csv")
+    public void getCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<Systemuser> listUsers = systemuserService.listAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "User ID", "Name", "Social Security Number", "Job Description" };
+        String[] nameMapping = { "id", "name", "socialSecurityNumber", "jobDescription" };
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (Systemuser user : listUsers) {
+            csvWriter.write(user, nameMapping);
+        }
+
+        csvWriter.close();
+    }
+
     /**
      * {@code POST  /systemusers} : Create a new systemuser.
      *
@@ -65,7 +96,7 @@ public class SystemuserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/systemusers")
-    public ResponseEntity<Systemuser> createSystemuser(@Valid @RequestBody Systemuser systemuser) throws URISyntaxException {
+    public ResponseEntity<Systemuser> createSystemuser(@RequestBody Systemuser systemuser) throws URISyntaxException {
         log.debug("REST request to save Systemuser : {}", systemuser);
         if (systemuser.getId() != null) {
             throw new BadRequestAlertException("A new systemuser cannot already have an ID", ENTITY_NAME, "idexists");
@@ -90,7 +121,7 @@ public class SystemuserResource {
     @PutMapping("/systemusers/{id}")
     public ResponseEntity<Systemuser> updateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Systemuser systemuser
+        @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to update Systemuser : {}, {}", id, systemuser);
         if (systemuser.getId() == null) {
@@ -125,7 +156,7 @@ public class SystemuserResource {
     @PatchMapping(value = "/systemusers/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Systemuser> partialUpdateSystemuser(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Systemuser systemuser
+        @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to partial update Systemuser partially : {}, {}", id, systemuser);
         if (systemuser.getId() == null) {

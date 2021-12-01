@@ -29,7 +29,7 @@ public class Targetsystemcredentials implements Serializable {
     private String password;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "user", "departments" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "departments" }, allowSetters = true)
     private Systemuser systemuser;
 
     @ManyToOne

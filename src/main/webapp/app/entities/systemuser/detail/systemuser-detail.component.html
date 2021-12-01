@@ -30,10 +30,6 @@
         <dd>
           <span>{{ systemuser.jobDescription }}</span>
         </dd>
-        <dt><span>User</span></dt>
-        <dd>
-          <span>{{ systemuser.user?.login }}</span>
-        </dd>
         <dt><span>Department</span></dt>
         <dd>
           <span *ngFor="let department of systemuser.departments; let last = last">

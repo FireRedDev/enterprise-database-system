@@ -37,7 +37,6 @@
           <th scope="col" jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="socialSecurityNumber"><span>Social Security Number</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="jobDescription"><span>Job Description</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="user.login"><span>User</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -50,9 +49,6 @@
           <td>{{ systemuser.name }}</td>
           <td>{{ systemuser.socialSecurityNumber }}</td>
           <td>{{ systemuser.jobDescription }}</td>
-          <td>
-            {{ systemuser.user?.login }}
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -3,11 +3,13 @@ package at.jku.employeeonboardingsystem.service.impl;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
 import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsService;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +71,10 @@ public class TargetsystemcredentialsServiceImpl implements Targetsystemcredentia
     public void delete(Long id) {
         log.debug("Request to delete Targetsystemcredentials : {}", id);
         targetsystemcredentialsRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Targetsystemcredentials> listAll() {
+        return targetsystemcredentialsRepository.findAll(Sort.by("targetsystem").ascending());
     }
 }

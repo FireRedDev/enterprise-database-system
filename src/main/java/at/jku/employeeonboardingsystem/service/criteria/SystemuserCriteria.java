@@ -35,8 +35,6 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     private StringFilter jobDescription;
 
-    private LongFilter userId;
-
     private LongFilter departmentId;
 
     private Boolean distinct;
@@ -49,7 +47,6 @@ public class SystemuserCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.socialSecurityNumber = other.socialSecurityNumber == null ? null : other.socialSecurityNumber.copy();
         this.jobDescription = other.jobDescription == null ? null : other.jobDescription.copy();
-        this.userId = other.userId == null ? null : other.userId.copy();
         this.departmentId = other.departmentId == null ? null : other.departmentId.copy();
         this.distinct = other.distinct;
     }
@@ -134,21 +131,6 @@ public class SystemuserCriteria implements Serializable, Criteria {
         this.jobDescription = jobDescription;
     }
 
-    public LongFilter getUserId() {
-        return userId;
-    }
-
-    public LongFilter userId() {
-        if (userId == null) {
-            userId = new LongFilter();
-        }
-        return userId;
-    }
-
-    public void setUserId(LongFilter userId) {
-        this.userId = userId;
-    }
-
     public LongFilter getDepartmentId() {
         return departmentId;
     }
@@ -187,7 +169,6 @@ public class SystemuserCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(socialSecurityNumber, that.socialSecurityNumber) &&
             Objects.equals(jobDescription, that.jobDescription) &&
-            Objects.equals(userId, that.userId) &&
             Objects.equals(departmentId, that.departmentId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -195,7 +176,7 @@ public class SystemuserCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entryDate, name, socialSecurityNumber, jobDescription, userId, departmentId, distinct);
+        return Objects.hash(id, entryDate, name, socialSecurityNumber, jobDescription, departmentId, distinct);
     }
 
     // prettier-ignore
@@ -207,7 +188,6 @@ public class SystemuserCriteria implements Serializable, Criteria {
             (name != null ? "name=" + name + ", " : "") +
             (socialSecurityNumber != null ? "socialSecurityNumber=" + socialSecurityNumber + ", " : "") +
             (jobDescription != null ? "jobDescription=" + jobDescription + ", " : "") +
-            (userId != null ? "userId=" + userId + ", " : "") +
             (departmentId != null ? "departmentId=" + departmentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

@@ -1,16 +1,28 @@
 package at.jku.employeeonboardingsystem.web.rest;
 
+import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
+import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
 import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsQueryService;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsService;
 import at.jku.employeeonboardingsystem.service.criteria.TargetsystemcredentialsCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.List;
 import java.util.Objects;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -18,11 +30,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -50,11 +66,44 @@ public class TargetsystemcredentialsResource {
     public TargetsystemcredentialsResource(
         TargetsystemcredentialsService targetsystemcredentialsService,
         TargetsystemcredentialsRepository targetsystemcredentialsRepository,
-        TargetsystemcredentialsQueryService targetsystemcredentialsQueryService
+        TargetsystemcredentialsQueryService targetsystemcredentialsQueryService,
+        TargetsystemRepository targetsystemRepository
     ) {
         this.targetsystemcredentialsService = targetsystemcredentialsService;
         this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
         this.targetsystemcredentialsQueryService = targetsystemcredentialsQueryService;
+    }
+
+    /**
+ * {@code GET  /targetsystemcredentials/csv/{id}} : get all the targetsystemcredentials for one targetsystem.
+     *
+     * @param response.
+     * @param id the id of the targetsystem
+     
+ */
+    @GetMapping("/targetsystemcredentials/csv/{id}")
+    public void getCSV(@PathVariable long id, HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=credentials_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = { "User ID", "Username", "password", "Systemuser", "targetsystem" };
+        String[] nameMapping = { "id", "username", "password", "systemuser", "targetsystem" };
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (Targetsystemcredentials c : listCredentials) {
+            if (c.getTargetsystem().getId().equals(id)) csvWriter.write(c, nameMapping);
+        }
+
+        csvWriter.close();
     }
 
     /**
