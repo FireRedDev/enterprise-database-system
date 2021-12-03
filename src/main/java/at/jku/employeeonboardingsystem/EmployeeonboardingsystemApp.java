@@ -1,8 +1,11 @@
 package at.jku.employeeonboardingsystem;
 
 import at.jku.employeeonboardingsystem.config.ApplicationProperties;
+import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
+import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -10,11 +13,19 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
@@ -63,11 +74,17 @@ public class EmployeeonboardingsystemApp {
      *
      * @param args the command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         SpringApplication app = new SpringApplication(EmployeeonboardingsystemApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+
+        try {
+            TargetSystemJdbc.copyDatabaseData();
+        } catch (final Exception e) {
+            System.out.println("No Database! Error " + e);
+        }
     }
 
     private static void logApplicationStartup(Environment env) {

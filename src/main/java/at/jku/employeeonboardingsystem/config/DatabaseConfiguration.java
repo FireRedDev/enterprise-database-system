@@ -1,10 +1,16 @@
 package at.jku.employeeonboardingsystem.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -39,6 +45,19 @@ public class DatabaseConfiguration {
         String port = getValidPortForH2();
         log.debug("H2 database is available on port {}", port);
         return H2ConfigurationHelper.createServer(port);
+    }
+
+    @Bean(name = "primaryDataSource")
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public HikariDataSource primaryDataSource(DataSourceProperties properties) {
+        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    }
+
+    @Bean(name = "secondaryDataSource")
+    @ConfigurationProperties(prefix = "spring.data.datasource")
+    public DataSource secondDataSource() {
+        return DataSourceBuilder.create().driverClassName("org.h2.Driver").build();
     }
 
     private String getValidPortForH2() {
