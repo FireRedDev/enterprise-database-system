@@ -10,6 +10,7 @@ import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
 import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
+import { MainComponent } from '../../../layouts/main/main.component';
 
 @Component({
   selector: 'jhi-user-mgmt',
@@ -30,12 +31,14 @@ export class UserManagementComponent implements OnInit {
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private main: MainComponent
   ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => (this.currentAccount = account));
     this.handleNavigation();
+    this.main.showFooter = false;
   }
 
   setActive(user: User, isActivated: boolean): void {
