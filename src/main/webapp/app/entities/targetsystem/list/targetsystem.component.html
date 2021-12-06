@@ -1,3 +1,11 @@
+<style>
+  table {
+    text-align: center;
+  }
+  .right {
+    text-align: right;
+  }
+</style>
 <div>
   <h2 id="page-heading" data-cy="TargetsystemHeading">
     <span>Targetsystems</span>
@@ -43,7 +51,7 @@
             <a [routerLink]="['/targetsystem', targetsystem.id, 'view']">{{ targetsystem.id }}</a>
           </td>
           <td>{{ targetsystem.name }}</td>
-          <td class="text-right">
+          <td class="right">
             <div class="btn-group">
               <button
                 type="submit"

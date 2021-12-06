@@ -9,6 +9,7 @@ import { ISystemuser } from '../systemuser.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { SystemuserService } from '../service/systemuser.service';
 import { SystemuserDeleteDialogComponent } from '../delete/systemuser-delete-dialog.component';
+import { MainComponent } from '../../../layouts/main/main.component';
 
 @Component({
   selector: 'jhi-systemuser',
@@ -28,7 +29,8 @@ export class SystemuserComponent implements OnInit {
     protected systemuserService: SystemuserService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected main: MainComponent
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -55,6 +57,7 @@ export class SystemuserComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+    this.main.showFooter = true;
   }
 
   trackId(index: number, item: ISystemuser): number {

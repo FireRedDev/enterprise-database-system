@@ -1,6 +1,29 @@
-<div class="row justify-content-center">
+<style>
+  .data_table {
+    margin: auto;
+    width: 50%;
+    grid-column-gap: 1px;
+    grid-gap: 1px;
+  }
+
+  .data_table dt {
+    margin: auto;
+    text-align: right;
+    hyphens: auto;
+    float: right;
+    display: inline-block;
+    width: 200px;
+  }
+
+  .data_table dd {
+    text-align: center;
+    width: 200px;
+  }
+</style>
+
+<div class="row justify-content-center data_table">
   <div class="col-8">
-    <div *ngIf="systemuser">
+    <div *ngIf="systemuser" style="text-align: center">
       <h2 data-cy="systemuserDetailsHeading"><span>Systemuser</span></h2>
 
       <hr />
@@ -9,7 +32,7 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
+      <dl class="row-md jh-entity-details" style="text-align: center">
         <dt><span>ID</span></dt>
         <dd>
           <span>{{ systemuser.id }}</span>
