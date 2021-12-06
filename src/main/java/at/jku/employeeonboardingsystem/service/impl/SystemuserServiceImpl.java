@@ -54,6 +54,7 @@ public class SystemuserServiceImpl implements SystemuserService {
                 departmentRepository
                     .findOneWithEagerRelationships(d.getId())
                     .get()
+                    //check ob es targetsystem credentials schon gibt
                     .getTargetsystems()
                     .forEach(t -> {
                         Targetsystemcredentials targetsystemcredentials = new Targetsystemcredentials();
