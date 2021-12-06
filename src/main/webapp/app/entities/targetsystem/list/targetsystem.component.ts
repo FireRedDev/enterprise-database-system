@@ -9,6 +9,7 @@ import { ITargetsystem } from '../targetsystem.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TargetsystemService } from '../service/targetsystem.service';
 import { TargetsystemDeleteDialogComponent } from '../delete/targetsystem-delete-dialog.component';
+import { MainComponent } from '../../../layouts/main/main.component';
 
 @Component({
   selector: 'jhi-targetsystem',
@@ -28,7 +29,8 @@ export class TargetsystemComponent implements OnInit {
     protected targetsystemService: TargetsystemService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected main: MainComponent
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -55,6 +57,7 @@ export class TargetsystemComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+    this.main.showFooter = true;
   }
 
   trackId(index: number, item: ITargetsystem): number {

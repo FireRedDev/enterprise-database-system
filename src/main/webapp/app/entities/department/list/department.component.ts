@@ -9,6 +9,7 @@ import { IDepartment } from '../department.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DepartmentService } from '../service/department.service';
 import { DepartmentDeleteDialogComponent } from '../delete/department-delete-dialog.component';
+import { MainComponent } from '../../../layouts/main/main.component';
 
 @Component({
   selector: 'jhi-department',
@@ -28,7 +29,8 @@ export class DepartmentComponent implements OnInit {
     protected departmentService: DepartmentService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected main: MainComponent
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -55,6 +57,7 @@ export class DepartmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+    this.main.showFooter = true;
   }
 
   trackId(index: number, item: IDepartment): number {

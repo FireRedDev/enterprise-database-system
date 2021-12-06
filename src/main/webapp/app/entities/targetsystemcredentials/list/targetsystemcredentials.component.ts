@@ -9,6 +9,7 @@ import { ITargetsystemcredentials } from '../targetsystemcredentials.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TargetsystemcredentialsService } from '../service/targetsystemcredentials.service';
 import { TargetsystemcredentialsDeleteDialogComponent } from '../delete/targetsystemcredentials-delete-dialog.component';
+import { MainComponent } from '../../../layouts/main/main.component';
 
 @Component({
   selector: 'jhi-targetsystemcredentials',
@@ -28,7 +29,8 @@ export class TargetsystemcredentialsComponent implements OnInit {
     protected targetsystemcredentialsService: TargetsystemcredentialsService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected main: MainComponent
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -55,6 +57,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+    this.main.showFooter = true;
   }
 
   trackId(index: number, item: ITargetsystemcredentials): number {
