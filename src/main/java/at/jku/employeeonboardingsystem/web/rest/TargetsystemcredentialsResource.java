@@ -9,6 +9,8 @@ import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsQueryServi
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsService;
 import at.jku.employeeonboardingsystem.service.criteria.TargetsystemcredentialsCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -23,6 +25,7 @@ import java.util.Objects;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -38,6 +41,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -77,6 +81,24 @@ public class TargetsystemcredentialsResource {
         this.targetsystemcredentialsService = targetsystemcredentialsService;
         this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
         this.targetsystemcredentialsQueryService = targetsystemcredentialsQueryService;
+    }
+
+    @GetMapping("/targetsystemcredentials/json/{id}")
+    public ResponseEntity<byte[]> getJson(@PathVariable long id) {
+        List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
+        listCredentials = listCredentials.stream().filter(c -> c.getTargetsystem().getId().equals(id)).collect(Collectors.toList());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String credentialsInJson = gson.toJson(listCredentials);
+        byte[] customerJsonBytes = credentialsInJson.getBytes();
+
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=credentials_" + currentDateTime + ".json")
+            .contentType(MediaType.APPLICATION_JSON)
+            .contentLength(customerJsonBytes.length)
+            .body(customerJsonBytes);
     }
 
     @GetMapping("/targetsystemcredentials/xml/{id}")
