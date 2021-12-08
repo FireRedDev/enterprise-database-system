@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A Department.
  */
+@XmlRootElement
 @Entity
 @Table(name = "department")
 public class Department implements Serializable {
@@ -26,7 +28,7 @@ public class Department implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_department__targetsystem",
         joinColumns = @JoinColumn(name = "department_id"),

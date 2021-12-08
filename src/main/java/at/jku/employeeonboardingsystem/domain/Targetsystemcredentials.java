@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A Targetsystemcredentials.
  */
+@XmlRootElement
 @Entity
 @Table(name = "targetsystemcredentials")
 public class Targetsystemcredentials implements Serializable {

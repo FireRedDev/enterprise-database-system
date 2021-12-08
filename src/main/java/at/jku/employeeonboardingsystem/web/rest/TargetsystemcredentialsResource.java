@@ -10,6 +10,8 @@ import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsService;
 import at.jku.employeeonboardingsystem.service.criteria.TargetsystemcredentialsCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
@@ -25,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +77,48 @@ public class TargetsystemcredentialsResource {
         this.targetsystemcredentialsService = targetsystemcredentialsService;
         this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
         this.targetsystemcredentialsQueryService = targetsystemcredentialsQueryService;
+    }
+
+    @GetMapping("/targetsystemcredentials/xml/{id}")
+    public void getXML(@PathVariable long id, HttpServletResponse response) throws IOException {
+        response.setContentType("text/xml");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=credentials_" + currentDateTime + ".xml";
+        response.setHeader(headerKey, headerValue);
+        PrintWriter xmlWriter = response.getWriter();
+        //  Targetsystemcredentials credentials = targetsystemcredentialsRepository.findById(id).orElseThrow();
+        List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
+        StringWriter sw = new StringWriter();
+        try {
+            //Create JAXB Context
+            JAXBContext jaxbContext = JAXBContext.newInstance(Targetsystemcredentials.class);
+
+            //Create Marshaller
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            //Required formatting??
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            listCredentials.forEach(c -> {
+                if (c.getTargetsystem().getId().equals(id)) {
+                    try {
+                        //Write XML to StringWriter
+                        jaxbMarshaller.marshal(c, sw);
+                    } catch (JAXBException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            //Verify XML Content
+            String xmlContent = sw.toString();
+
+            xmlWriter.append(xmlContent);
+            xmlWriter.close();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

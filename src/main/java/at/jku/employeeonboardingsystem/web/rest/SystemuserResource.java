@@ -7,6 +7,8 @@ import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
@@ -16,6 +18,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +67,44 @@ public class SystemuserResource {
         this.systemuserService = systemuserService;
         this.systemuserRepository = systemuserRepository;
         this.systemuserQueryService = systemuserQueryService;
+    }
+
+    @GetMapping("/users/xml/{id}")
+    public void getXML(@PathVariable long id, HttpServletResponse response) throws IOException {
+        response.setContentType("text/xml");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=credentials_" + currentDateTime + ".xml";
+        response.setHeader(headerKey, headerValue);
+        PrintWriter xmlWriter = response.getWriter();
+        Systemuser user = systemuserRepository.findById(id).orElseThrow();
+
+        try {
+            //Create JAXB Context
+            JAXBContext jaxbContext = JAXBContext.newInstance(Systemuser.class);
+
+            //Create Marshaller
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            //Required formatting??
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            //Print XML String to Console
+            StringWriter sw = new StringWriter();
+
+            //Write XML to StringWriter
+            jaxbMarshaller.marshal(user, sw);
+
+            //Verify XML Content
+            String xmlContent = sw.toString();
+
+            xmlWriter.append(xmlContent);
+            //  xmlWriter.close();
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/users/csv")

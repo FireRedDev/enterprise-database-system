@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A Systemuser.
  */
+@XmlRootElement
 @Entity
 @Table(name = "systemuser")
 public class Systemuser implements Serializable {
@@ -34,7 +36,7 @@ public class Systemuser implements Serializable {
     @Column(name = "job_description")
     private String jobDescription;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_systemuser__department",
         joinColumns = @JoinColumn(name = "systemuser_id"),
