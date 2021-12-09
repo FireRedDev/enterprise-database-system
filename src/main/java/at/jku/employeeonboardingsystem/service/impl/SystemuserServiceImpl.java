@@ -46,6 +46,7 @@ public class SystemuserServiceImpl implements SystemuserService {
     @Override
     public Systemuser save(Systemuser systemuser) {
         log.debug("Request to save Systemuser : {}", systemuser);
+        Systemuser sys = systemuserRepository.save(systemuser);
 
         List<Targetsystemcredentials> credentials = new ArrayList<>();
         systemuser
@@ -57,19 +58,21 @@ public class SystemuserServiceImpl implements SystemuserService {
                     //check ob es targetsystem credentials schon gibt
                     .getTargetsystems()
                     .forEach(t -> {
-                        Targetsystemcredentials targetsystemcredentials = new Targetsystemcredentials();
-                        targetsystemcredentials.setSystemuser(systemuser);
-                        targetsystemcredentials.setUsername(systemuser.getName().replace(' ', '_').toLowerCase());
-                        String generatedString = RandomStringUtils.random(10, true, true);
-                        targetsystemcredentials.setPassword(generatedString);
-                        targetsystemcredentials.setTargetsystem(t);
-                        credentials.add(targetsystemcredentials);
+                        if (!targetsystemcredentialsRepository.existsTargetsystemcredentialsBySystemuserAndTargetsystem(systemuser, t)) {
+                            Targetsystemcredentials targetsystemcredentials = new Targetsystemcredentials();
+                            targetsystemcredentials.setSystemuser(systemuser);
+                            targetsystemcredentials.setUsername(systemuser.getName().replace(' ', '_').toLowerCase());
+                            String generatedString = RandomStringUtils.random(10, true, true);
+                            targetsystemcredentials.setPassword(generatedString);
+                            targetsystemcredentials.setTargetsystem(t);
+                            credentials.add(targetsystemcredentials);
+                        }
                     });
             });
 
         targetsystemcredentialsRepository.saveAll(credentials);
 
-        return systemuserRepository.save(systemuser);
+        return sys;
     }
 
     @Override
