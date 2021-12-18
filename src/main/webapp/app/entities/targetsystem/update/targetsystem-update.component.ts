@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { ITargetsystem, Targetsystem } from '../targetsystem.model';
+import { ITargetsystem, Targetsystem, TargetSystemTypes } from '../targetsystem.model';
 import { TargetsystemService } from '../service/targetsystem.service';
 
 @Component({
@@ -14,7 +14,8 @@ import { TargetsystemService } from '../service/targetsystem.service';
 })
 export class TargetsystemUpdateComponent implements OnInit {
   isSaving = false;
-
+  type = 'none';
+  types = ['CSV', 'LDAB', 'Datenbank'];
   editForm = this.fb.group({
     id: [],
     name: [],
@@ -39,6 +40,12 @@ export class TargetsystemUpdateComponent implements OnInit {
       this.subscribeToSaveResponse(this.targetsystemService.update(targetsystem));
     } else {
       this.subscribeToSaveResponse(this.targetsystemService.create(targetsystem));
+    }
+  }
+
+  selectType(id: any): void {
+    if (id.value !== 'auswählen') {
+      this.type = id.value;
     }
   }
 
