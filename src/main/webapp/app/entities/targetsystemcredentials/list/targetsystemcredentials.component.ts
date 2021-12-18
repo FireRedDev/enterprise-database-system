@@ -55,6 +55,10 @@ export class TargetsystemcredentialsComponent implements OnInit {
       );
   }
 
+  downloadSvg(item: number): void {
+    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + item.toString();
+  }
+
   ngOnInit(): void {
     this.handleNavigation();
     this.main.showFooter = true;

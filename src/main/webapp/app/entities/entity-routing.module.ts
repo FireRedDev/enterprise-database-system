@@ -24,6 +24,7 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'Departments' },
         loadChildren: () => import('./department/department.module').then(m => m.DepartmentModule),
       },
+
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
