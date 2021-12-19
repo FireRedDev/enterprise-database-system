@@ -15,7 +15,15 @@ export interface ITargetsystem {
 }
 
 export class Targetsystem implements ITargetsystem {
-  constructor(public id?: number, public name?: string | null) {}
+  constructor(
+    public id?: number,
+    public name?: string | null,
+    public type?: TargetSystemTypes,
+    dbUrl?: string | null,
+    dbuser?: string | null,
+    dbpassword?: string | null,
+    csvAttributes?: boolean[] | null
+  ) {}
 }
 
 export function getTargetsystemIdentifier(targetsystem: ITargetsystem): number | undefined {

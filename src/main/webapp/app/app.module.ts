@@ -25,6 +25,7 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { NavEntitiesComponent } from './entities/nav-entities/nav-entities.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { NavEntitiesComponent } from './entities/nav-entities/nav-entities.compo
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
+    FormsModule,
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,

@@ -16,9 +16,21 @@ export class TargetsystemUpdateComponent implements OnInit {
   isSaving = false;
   type = 'none';
   types = ['CSV', 'LDAB', 'Datenbank'];
+  url = 'EMPTY';
+  username = '';
+  password = '';
+  attributes = ['User ID', 'Username', 'Passwort', 'Systemuser', 'Targetsystem'];
+  attributesFinal = this.attributes;
+  attributesBoolean = [true, true, true, true, true];
+  tryin: any;
   editForm = this.fb.group({
     id: [],
     name: [],
+    type: [],
+    dbUrl: [],
+    dbuser: [],
+    dbpassword: [],
+    csvAttributes: [],
   });
 
   constructor(protected targetsystemService: TargetsystemService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -31,6 +43,16 @@ export class TargetsystemUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onCheckChange(): void {
+    for (let i = 0; i < this.attributesBoolean.length; i++) {
+      if (!this.attributesBoolean[i]) {
+        this.attributesFinal[i] = '';
+      } else {
+        this.attributesFinal[i] = this.attributes[i];
+      }
+    }
   }
 
   save(): void {
@@ -76,10 +98,30 @@ export class TargetsystemUpdateComponent implements OnInit {
   }
 
   protected createFromForm(): ITargetsystem {
+    let finalType = TargetSystemTypes.CSV;
+    switch (this.type) {
+      case 'CSV': {
+        finalType = TargetSystemTypes.CSV;
+        break;
+      }
+      case 'LDAB': {
+        finalType = TargetSystemTypes.LDAV;
+        break;
+      }
+      case 'Datenbank': {
+        finalType = TargetSystemTypes.Database;
+        break;
+      }
+    }
     return {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
+      type: finalType,
+      dbUrl: this.editForm.get('url')?.value,
+      dbuser: this.editForm.get('username')?.value,
+      dbpassword: this.editForm.get('password')?.value,
+      csvAttributes: this.attributesBoolean,
     };
   }
 }
