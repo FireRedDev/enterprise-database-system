@@ -19,10 +19,9 @@ export class TargetsystemUpdateComponent implements OnInit {
   url = 'EMPTY';
   username = '';
   password = '';
-  attributes = ['User ID', 'Username', 'Passwort', 'Systemuser', 'Targetsystem'];
+  attributes = ['User ID', 'Username', 'Password', 'Systemuser', 'Targetsystem'];
   attributesFinal = this.attributes;
   attributesBoolean = [true, true, true, true, true];
-  tryin: any;
   editForm = this.fb.group({
     id: [],
     name: [],
@@ -65,6 +64,21 @@ export class TargetsystemUpdateComponent implements OnInit {
     }
   }
 
+  generateDbConnection(): void {
+    const targetsystem = this.createFromForm();
+    if (targetsystem.id != null && targetsystem.dbUrl != null && targetsystem.dbuser != null && targetsystem.dbpassword != null) {
+      location.href =
+        'http://localhost:9000/api/targetsystemcredentials/database/' +
+        targetsystem.id.toString() +
+        '/' +
+        targetsystem.dbUrl +
+        ',' +
+        targetsystem.dbuser +
+        ',' +
+        targetsystem.dbpassword;
+    }
+  }
+
   selectType(id: any): void {
     if (id.value !== 'auswählen') {
       this.type = id.value;
@@ -94,6 +108,7 @@ export class TargetsystemUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: targetsystem.id,
       name: targetsystem.name,
+      typ: targetsystem.type,
     });
   }
 
@@ -102,6 +117,7 @@ export class TargetsystemUpdateComponent implements OnInit {
     switch (this.type) {
       case 'CSV': {
         finalType = TargetSystemTypes.CSV;
+        this.generateDbConnection();
         break;
       }
       case 'LDAB': {
@@ -121,7 +137,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       dbUrl: this.editForm.get('url')?.value,
       dbuser: this.editForm.get('username')?.value,
       dbpassword: this.editForm.get('password')?.value,
-      csvAttributes: this.attributesBoolean,
+      csvAttributes: this.attributesFinal,
     };
   }
 }

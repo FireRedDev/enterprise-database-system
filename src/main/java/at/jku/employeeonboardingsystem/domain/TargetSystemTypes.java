@@ -1,3 +1,7 @@
 package at.jku.employeeonboardingsystem.domain;
 
-public enum TargetSystemTypes {}
+public enum TargetSystemTypes {
+    CSV,
+    LDAB,
+    Database,
+}

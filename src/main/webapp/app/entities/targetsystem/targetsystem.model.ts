@@ -11,7 +11,7 @@ export interface ITargetsystem {
   dbUrl?: string | null;
   dbuser?: string | null;
   dbpassword?: string | null;
-  csvAttributes?: boolean[] | null;
+  csvAttributes?: string[] | null;
 }
 
 export class Targetsystem implements ITargetsystem {
@@ -42,7 +42,7 @@ export function getDbPassword(targetsystem: ITargetsystem): string | null | unde
   return targetsystem.dbpassword;
 }
 
-export function getCsvAttributes(targetsystem: ITargetsystem): boolean[] | null | undefined {
+export function getCsvAttributes(targetsystem: ITargetsystem): string[] | null | undefined {
   return targetsystem.csvAttributes;
 }
 

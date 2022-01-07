@@ -10,6 +10,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { TargetsystemcredentialsService } from '../service/targetsystemcredentials.service';
 import { TargetsystemcredentialsDeleteDialogComponent } from '../delete/targetsystemcredentials-delete-dialog.component';
 import { MainComponent } from '../../../layouts/main/main.component';
+import { TargetSystemTypes } from '../../targetsystem/targetsystem.model';
 
 @Component({
   selector: 'jhi-targetsystemcredentials',
@@ -24,6 +25,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  attributes = {};
 
   constructor(
     protected targetsystemcredentialsService: TargetsystemcredentialsService,
@@ -55,8 +57,19 @@ export class TargetsystemcredentialsComponent implements OnInit {
       );
   }
 
-  downloadSvg(item: number): void {
-    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + item.toString();
+  downloadCsv(item: ITargetsystemcredentials, id: number): void {
+    let href = '';
+
+    if (item.targetsystem?.type === TargetSystemTypes.CSV) {
+      href += '[';
+      if (item.targetsystem.csvAttributes !== undefined && item.targetsystem.csvAttributes !== null) {
+        for (let i = 0; i < item.targetsystem.csvAttributes.length; i++) {
+          href += item.targetsystem.csvAttributes[i] + ',';
+        }
+        href += ']';
+      }
+    }
+    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + id.toString() + '/' + href;
   }
 
   ngOnInit(): void {
