@@ -124,7 +124,22 @@ spring:
   output:
     ansi:
       console-available: true
-
+  ldap:
+    embedded:
+      base-dn: dc=memorynotfound,dc=com
+      credential:
+        username: uid=admin
+        password: secret
+      ldif: classpath:test-schema.ldif
+      port: 12345
+      validation:
+        enabled: false
+#non embedded for production mode
+#  ldap:
+#    urls: 'ldap://localhost:12345'
+#    base: dc
+#    username: uid
+#    password: secret
 server:
   servlet:
     session:
@@ -179,3 +194,10 @@ jhipster:
 # ===================================================================
 
 # application:
+#  spring:
+#    ldap:
+#      url: 'ldap://localhost:389'
+#      base: dc
+#      username: admin
+#      password: admin
+
