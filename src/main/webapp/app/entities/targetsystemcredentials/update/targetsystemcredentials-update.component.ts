@@ -18,14 +18,25 @@ import { TargetsystemService } from 'app/entities/targetsystem/service/targetsys
 })
 export class TargetsystemcredentialsUpdateComponent implements OnInit {
   isSaving = false;
+  show = false;
 
   systemusersSharedCollection: ISystemuser[] = [];
   targetsystemsSharedCollection: ITargetsystem[] = [];
 
   editForm = this.fb.group({
     id: [],
-    username: [],
-    password: [null, [Validators.required, Validators.minLength(6)]],
+    username: [
+      null,
+      [Validators.required, Validators.minLength(6), Validators.pattern('^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$')],
+    ],
+    password: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&_])[A-Za-z\\d$@$!%*?&].{8,}'),
+      ],
+    ],
     systemuser: [],
     targetsystem: [],
   });
@@ -38,7 +49,12 @@ export class TargetsystemcredentialsUpdateComponent implements OnInit {
     protected fb: FormBuilder
   ) {}
 
+  password(): void {
+    this.show = !this.show;
+  }
+
   ngOnInit(): void {
+    this.show = false;
     this.activatedRoute.data.subscribe(({ targetsystemcredentials }) => {
       this.updateForm(targetsystemcredentials);
 
