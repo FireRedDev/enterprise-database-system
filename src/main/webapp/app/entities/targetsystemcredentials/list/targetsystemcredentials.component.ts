@@ -10,6 +10,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { TargetsystemcredentialsService } from '../service/targetsystemcredentials.service';
 import { TargetsystemcredentialsDeleteDialogComponent } from '../delete/targetsystemcredentials-delete-dialog.component';
 import { MainComponent } from '../../../layouts/main/main.component';
+import { ITargetsystem } from '../../targetsystem/targetsystem.model';
 
 @Component({
   selector: 'jhi-targetsystemcredentials',
@@ -55,8 +56,8 @@ export class TargetsystemcredentialsComponent implements OnInit {
       );
   }
 
-  downloadSvg(item: number): void {
-    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + item.toString();
+  downloadCsv(targetsystem: ITargetsystem): void {
+    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + targetsystem.id!.toString();
   }
 
   ngOnInit(): void {
