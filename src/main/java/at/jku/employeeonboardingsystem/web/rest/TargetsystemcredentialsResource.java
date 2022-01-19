@@ -3,6 +3,7 @@ package at.jku.employeeonboardingsystem.web.rest;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
 import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
+import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
 import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
 import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.TargetsystemcredentialsQueryService;
@@ -16,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -83,6 +85,53 @@ public class TargetsystemcredentialsResource {
         this.targetsystemcredentialsQueryService = targetsystemcredentialsQueryService;
     }
 
+    @GetMapping("/targetsystemcredentials/csv/{id}/{attributes}")
+    public void getCSV(@PathVariable("id") long id, HttpServletResponse response, @PathVariable String attributes) throws IOException {
+        response.setContentType("text/csv");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=credentials_" + currentDateTime + ".csv";
+        response.setHeader(headerKey, headerValue);
+
+        List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
+
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = attributes.split(",");
+        String[] nameMapping = attributes.split(",");
+
+        csvWriter.writeHeader(csvHeader);
+
+        for (Targetsystemcredentials c : listCredentials) {
+            if (c.getTargetsystem().getId().equals(id)) csvWriter.write(c, nameMapping);
+        }
+
+        csvWriter.close();
+    }
+
+    @GetMapping("/targetsystemcredentials/database/{id}/{attributes}")
+    public void getDatabaseConnection(@PathVariable("id") long id, @PathVariable String attributes) throws IOException {
+        try {
+            List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
+            for (Targetsystemcredentials c : listCredentials) {
+                if (c.getTargetsystem().getId().equals(id)) {
+                    String[] nameMapping = attributes.split(",");
+                    c.getTargetsystem().setDbUrl(nameMapping[0]);
+                    c.getTargetsystem().setDbUser(nameMapping[1]);
+                    c.getTargetsystem().setDbPassword(nameMapping[2]);
+                    TargetSystemJdbc.copyDatabaseData(
+                        c.getTargetsystem().getDbUrl(),
+                        c.getTargetsystem().getDbUser(),
+                        c.getTargetsystem().getDbPassword()
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
+
     @GetMapping("/targetsystemcredentials/json/{id}")
     public ResponseEntity<byte[]> getJson(@PathVariable long id) {
         List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
@@ -145,10 +194,10 @@ public class TargetsystemcredentialsResource {
 
     /**
  * {@code GET  /targetsystemcredentials/csv/{id}} : get all the targetsystemcredentials for one targetsystem.
-     *
-     * @param response.
+     * @param id
+     * @param response
      * @param id the id of the targetsystem
-     
+
  */
     @GetMapping("/targetsystemcredentials/csv/{id}")
     public void getCSV(@PathVariable long id, HttpServletResponse response) throws IOException {

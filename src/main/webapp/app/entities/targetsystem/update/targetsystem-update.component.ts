@@ -16,9 +16,21 @@ export class TargetsystemUpdateComponent implements OnInit {
   isSaving = false;
   type = 'none';
   types = ['CSV', 'LDAB', 'Datenbank'];
+  url = 'EMPTY';
+  username = '';
+  password = '';
+  attributes = ['User ID', 'Username', 'Passwort', 'Systemuser', 'Targetsystem'];
+  attributesFinal = this.attributes;
+  attributesBoolean = [true, true, true, true, true];
+  tryin: any;
   editForm = this.fb.group({
     id: [],
     name: [],
+    type: [],
+    dbUrl: [],
+    dbuser: [],
+    dbpassword: [],
+    csvAttributes: [],
   });
 
   constructor(protected targetsystemService: TargetsystemService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -31,6 +43,16 @@ export class TargetsystemUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onCheckChange(): void {
+    for (let i = 0; i < this.attributesBoolean.length; i++) {
+      if (!this.attributesBoolean[i]) {
+        this.attributesFinal[i] = '';
+      } else {
+        this.attributesFinal[i] = this.attributes[i];
+      }
+    }
   }
 
   save(): void {
@@ -46,6 +68,21 @@ export class TargetsystemUpdateComponent implements OnInit {
   selectType(id: any): void {
     if (id.value !== 'auswählen') {
       this.type = id.value;
+    }
+  }
+
+  generateDbConnection(): void {
+    const targetsystem = this.getTargetSystem();
+    if (targetsystem.id != null && targetsystem.dbUrl != null && targetsystem.dbuser != null && targetsystem.dbpassword != null) {
+      location.href =
+        'http://localhost:9000/api/targetsystemcredentials/database/' +
+        targetsystem.id.toString() +
+        '/' +
+        targetsystem.dbUrl +
+        ',' +
+        targetsystem.dbuser +
+        ',' +
+        targetsystem.dbpassword;
     }
   }
 
@@ -72,14 +109,49 @@ export class TargetsystemUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: targetsystem.id,
       name: targetsystem.name,
+      typ: targetsystem.type,
     });
   }
 
-  protected createFromForm(): ITargetsystem {
+  protected getTargetSystem(): ITargetsystem {
     return {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
+      type: TargetSystemTypes.CSV,
+      dbUrl: this.editForm.get('url')?.value,
+      dbuser: this.editForm.get('username')?.value,
+      dbpassword: this.editForm.get('password')?.value,
+      csvAttributes: this.attributesFinal,
+    };
+  }
+
+  protected createFromForm(): ITargetsystem {
+    let finalType = TargetSystemTypes.CSV;
+    switch (this.type) {
+      case 'CSV': {
+        finalType = TargetSystemTypes.CSV;
+        this.generateDbConnection();
+        break;
+      }
+      case 'LDAB': {
+        finalType = TargetSystemTypes.LDAB;
+        break;
+      }
+      case 'Datenbank': {
+        finalType = TargetSystemTypes.Database;
+        break;
+      }
+    }
+    return {
+      ...new Targetsystem(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      type: finalType,
+      dbUrl: this.editForm.get('url')?.value,
+      dbuser: this.editForm.get('username')?.value,
+      dbpassword: this.editForm.get('password')?.value,
+      csvAttributes: this.attributesFinal,
     };
   }
 }

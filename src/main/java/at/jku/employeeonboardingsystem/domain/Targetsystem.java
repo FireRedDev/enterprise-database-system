@@ -21,6 +21,21 @@ public class Targetsystem implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "type")
+    private TargetSystemTypes systemTypes;
+
+    @Column(name = "dbUrl")
+    private String dbUrl;
+
+    @Column(name = "dbUser")
+    private String dbUser;
+
+    @Column(name = "dbPassword")
+    private String dbPassword;
+
+    @Column(name = "csvAttributes")
+    private String csvAttributes;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -30,6 +45,46 @@ public class Targetsystem implements Serializable {
     public Targetsystem id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public TargetSystemTypes getSystemTypes() {
+        return systemTypes;
+    }
+
+    public String getDbUrl() {
+        return dbUrl;
+    }
+
+    public void setDbUrl(String dbUrl) {
+        this.dbUrl = dbUrl;
+    }
+
+    public String getDbUser() {
+        return dbUser;
+    }
+
+    public void setDbUser(String dbUser) {
+        this.dbUser = dbUser;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    public String getCsvAttributes() {
+        return csvAttributes;
+    }
+
+    public void setCsvAttributes(String csvAttributes) {
+        this.csvAttributes = csvAttributes;
+    }
+
+    public void setSystemTypes(TargetSystemTypes systemTypes) {
+        this.systemTypes = systemTypes;
     }
 
     public void setId(Long id) {
