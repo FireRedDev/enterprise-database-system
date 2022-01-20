@@ -118,7 +118,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      type: TargetSystemTypes.CSV,
+      type: TargetSystemTypes.Database,
       dbUrl: this.editForm.get('url')?.value,
       dbuser: this.editForm.get('username')?.value,
       dbpassword: this.editForm.get('password')?.value,
@@ -131,7 +131,7 @@ export class TargetsystemUpdateComponent implements OnInit {
     switch (this.type) {
       case 'CSV': {
         finalType = TargetSystemTypes.CSV;
-        this.generateDbConnection();
+
         break;
       }
       case 'LDAB': {
@@ -140,6 +140,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       }
       case 'Datenbank': {
         finalType = TargetSystemTypes.Database;
+        this.generateDbConnection();
         break;
       }
     }
