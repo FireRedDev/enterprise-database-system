@@ -1,28 +1,6 @@
-<style>
-  .data_table {
-    margin: auto;
-    width: 50%;
-    grid-column-gap: 1px;
-    grid-gap: 1px;
-  }
-
-  .data_table dt {
-    margin: auto;
-    text-align: right;
-    hyphens: auto;
-    float: right;
-    display: inline-block;
-    width: 200px;
-  }
-
-  .data_table dd {
-    text-align: center;
-    width: 200px;
-  }
-</style>
-<div class="row justify-content-center data_table">
+<div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="targetsystem" style="text-align: center">
+    <div *ngIf="targetsystem">
       <h2 data-cy="targetsystemDetailsHeading"><span>Targetsystem</span></h2>
 
       <hr />
@@ -31,7 +9,7 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details" style="text-align: center">
+      <dl class="row-md jh-entity-details">
         <dt><span>ID</span></dt>
         <dd>
           <span>{{ targetsystem.id }}</span>
@@ -39,6 +17,22 @@
         <dt><span>Name</span></dt>
         <dd>
           <span>{{ targetsystem.name }}</span>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+          <span>{{ targetsystem.type }}</span>
+        </dd>
+        <dt><span>Url</span></dt>
+        <dd>
+          <span>{{ targetsystem.url }}</span>
+        </dd>
+        <dt><span>Password</span></dt>
+        <dd>
+          <span>{{ targetsystem.password }}</span>
+        </dd>
+        <dt><span>Username</span></dt>
+        <dd>
+          <span>{{ targetsystem.username }}</span>
         </dd>
       </dl>
 

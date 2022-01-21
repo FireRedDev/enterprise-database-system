@@ -69,6 +69,7 @@ public class SystemuserResource {
         this.systemuserQueryService = systemuserQueryService;
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/users/xml/{id}")
     public void getXML(@PathVariable long id, HttpServletResponse response) throws IOException {
         response.setContentType("text/xml");

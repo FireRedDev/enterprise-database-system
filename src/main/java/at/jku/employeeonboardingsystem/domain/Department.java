@@ -5,12 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A Department.
  */
-@XmlRootElement
 @Entity
 @Table(name = "department")
 public class Department implements Serializable {

@@ -45,6 +45,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.supercsv.io.CsvBeanWriter;
@@ -110,7 +111,7 @@ public class TargetsystemcredentialsResource {
         csvWriter.close();
     }
 
-    @GetMapping("/targetsystemcredentials/database/{id}/{attributes}")
+    /*   @GetMapping("/targetsystemcredentials/database/{id}/{attributes}")
     public void getDatabaseConnection(@PathVariable("id") long id, @PathVariable String attributes) throws IOException {
         try {
             List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
@@ -130,13 +131,13 @@ public class TargetsystemcredentialsResource {
         } catch (Exception e) {
             e.getMessage();
         }
-    }
-
+    }*/
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/targetsystemcredentials/json/{id}")
     public ResponseEntity<byte[]> getJson(@PathVariable long id) {
         List<Targetsystemcredentials> listCredentials = targetsystemcredentialsService.listAll();
         listCredentials = listCredentials.stream().filter(c -> c.getTargetsystem().getId().equals(id)).collect(Collectors.toList());
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
         String credentialsInJson = gson.toJson(listCredentials);
@@ -150,6 +151,7 @@ public class TargetsystemcredentialsResource {
             .body(customerJsonBytes);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/targetsystemcredentials/xml/{id}")
     public void getXML(@PathVariable long id, HttpServletResponse response) throws IOException {
         response.setContentType("text/xml");
@@ -199,6 +201,7 @@ public class TargetsystemcredentialsResource {
      * @param id the id of the targetsystem
 
  */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/targetsystemcredentials/csv/{id}")
     public void getCSV(@PathVariable long id, HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
@@ -232,6 +235,7 @@ public class TargetsystemcredentialsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/targetsystemcredentials")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Targetsystemcredentials> createTargetsystemcredentials(
         @Valid @RequestBody Targetsystemcredentials targetsystemcredentials
     ) throws URISyntaxException {
@@ -256,6 +260,7 @@ public class TargetsystemcredentialsResource {
      * or with status {@code 500 (Internal Server Error)} if the targetsystemcredentials couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @PutMapping("/targetsystemcredentials/{id}")
     public ResponseEntity<Targetsystemcredentials> updateTargetsystemcredentials(
         @PathVariable(value = "id", required = false) final Long id,
@@ -291,6 +296,7 @@ public class TargetsystemcredentialsResource {
      * or with status {@code 500 (Internal Server Error)} if the targetsystemcredentials couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @PatchMapping(value = "/targetsystemcredentials/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Targetsystemcredentials> partialUpdateTargetsystemcredentials(
         @PathVariable(value = "id", required = false) final Long id,
@@ -324,6 +330,7 @@ public class TargetsystemcredentialsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of targetsystemcredentials in body.
      */
     @GetMapping("/targetsystemcredentials")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<List<Targetsystemcredentials>> getAllTargetsystemcredentials(
         TargetsystemcredentialsCriteria criteria,
         Pageable pageable
@@ -340,6 +347,7 @@ public class TargetsystemcredentialsResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/targetsystemcredentials/count")
     public ResponseEntity<Long> countTargetsystemcredentials(TargetsystemcredentialsCriteria criteria) {
         log.debug("REST request to count Targetsystemcredentials by criteria: {}", criteria);
@@ -352,6 +360,7 @@ public class TargetsystemcredentialsResource {
      * @param id the id of the targetsystemcredentials to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the targetsystemcredentials, or with status {@code 404 (Not Found)}.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @GetMapping("/targetsystemcredentials/{id}")
     public ResponseEntity<Targetsystemcredentials> getTargetsystemcredentials(@PathVariable Long id) {
         log.debug("REST request to get Targetsystemcredentials : {}", id);
@@ -365,6 +374,7 @@ public class TargetsystemcredentialsResource {
      * @param id the id of the targetsystemcredentials to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     @DeleteMapping("/targetsystemcredentials/{id}")
     public ResponseEntity<Void> deleteTargetsystemcredentials(@PathVariable Long id) {
         log.debug("REST request to delete Targetsystemcredentials : {}", id);

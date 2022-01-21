@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { ITargetsystem, Targetsystem, TargetSystemTypes } from '../targetsystem.model';
+import { ITargetsystem, Targetsystem } from '../targetsystem.model';
 import { TargetsystemService } from '../service/targetsystem.service';
 
 @Component({
@@ -14,23 +14,14 @@ import { TargetsystemService } from '../service/targetsystem.service';
 })
 export class TargetsystemUpdateComponent implements OnInit {
   isSaving = false;
-  type = 'none';
-  types = ['CSV', 'LDAB', 'Datenbank'];
-  url = 'EMPTY';
-  username = '';
-  password = '';
-  attributes = ['User ID', 'Username', 'Passwort', 'Systemuser', 'Targetsystem'];
-  attributesFinal = this.attributes;
-  attributesBoolean = [true, true, true, true, true];
-  tryin: any;
+
   editForm = this.fb.group({
     id: [],
     name: [],
     type: [],
-    dbUrl: [],
-    dbuser: [],
-    dbpassword: [],
-    csvAttributes: [],
+    url: [],
+    password: [],
+    username: [],
   });
 
   constructor(protected targetsystemService: TargetsystemService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -45,16 +36,6 @@ export class TargetsystemUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  onCheckChange(): void {
-    for (let i = 0; i < this.attributesBoolean.length; i++) {
-      if (!this.attributesBoolean[i]) {
-        this.attributesFinal[i] = '';
-      } else {
-        this.attributesFinal[i] = this.attributes[i];
-      }
-    }
-  }
-
   save(): void {
     this.isSaving = true;
     const targetsystem = this.createFromForm();
@@ -62,27 +43,6 @@ export class TargetsystemUpdateComponent implements OnInit {
       this.subscribeToSaveResponse(this.targetsystemService.update(targetsystem));
     } else {
       this.subscribeToSaveResponse(this.targetsystemService.create(targetsystem));
-    }
-  }
-
-  selectType(id: any): void {
-    if (id.value !== 'auswählen') {
-      this.type = id.value;
-    }
-  }
-
-  generateDbConnection(): void {
-    const targetsystem = this.getTargetSystem();
-    if (targetsystem.id != null && targetsystem.dbUrl != null && targetsystem.dbuser != null && targetsystem.dbpassword != null) {
-      location.href =
-        'http://localhost:9000/api/targetsystemcredentials/database/' +
-        targetsystem.id.toString() +
-        '/' +
-        targetsystem.dbUrl +
-        ',' +
-        targetsystem.dbuser +
-        ',' +
-        targetsystem.dbpassword;
     }
   }
 
@@ -109,50 +69,22 @@ export class TargetsystemUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: targetsystem.id,
       name: targetsystem.name,
-      typ: targetsystem.type,
+      type: targetsystem.type,
+      url: targetsystem.url,
+      password: targetsystem.password,
+      username: targetsystem.username,
     });
   }
 
-  protected getTargetSystem(): ITargetsystem {
-    return {
-      ...new Targetsystem(),
-      id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
-      type: TargetSystemTypes.Database,
-      dbUrl: this.editForm.get('url')?.value,
-      dbuser: this.editForm.get('username')?.value,
-      dbpassword: this.editForm.get('password')?.value,
-      csvAttributes: this.attributesFinal,
-    };
-  }
-
   protected createFromForm(): ITargetsystem {
-    let finalType = TargetSystemTypes.CSV;
-    switch (this.type) {
-      case 'CSV': {
-        finalType = TargetSystemTypes.CSV;
-
-        break;
-      }
-      case 'LDAB': {
-        finalType = TargetSystemTypes.LDAB;
-        break;
-      }
-      case 'Datenbank': {
-        finalType = TargetSystemTypes.Database;
-        this.generateDbConnection();
-        break;
-      }
-    }
     return {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      type: finalType,
-      dbUrl: this.editForm.get('url')?.value,
-      dbuser: this.editForm.get('username')?.value,
-      dbpassword: this.editForm.get('password')?.value,
-      csvAttributes: this.attributesFinal,
+      type: this.editForm.get(['type'])!.value,
+      url: this.editForm.get(['url'])!.value,
+      password: this.editForm.get(['password'])!.value,
+      username: this.editForm.get(['username'])!.value,
     };
   }
 }

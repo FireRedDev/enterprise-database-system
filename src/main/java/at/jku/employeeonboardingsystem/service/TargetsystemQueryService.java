@@ -88,6 +88,18 @@ public class TargetsystemQueryService extends QueryService<Targetsystem> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Targetsystem_.name));
             }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getType(), Targetsystem_.type));
+            }
+            if (criteria.getUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUrl(), Targetsystem_.url));
+            }
+            if (criteria.getPassword() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPassword(), Targetsystem_.password));
+            }
+            if (criteria.getUsername() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUsername(), Targetsystem_.username));
+            }
         }
         return specification;
     }

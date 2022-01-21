@@ -1,29 +1,6 @@
-<style>
-  .data_table {
-    margin: auto;
-    width: 50%;
-    grid-column-gap: 1px;
-    grid-gap: 1px;
-  }
-
-  .data_table dt {
-    margin: auto;
-    text-align: right;
-    hyphens: auto;
-    float: right;
-    display: inline-block;
-    width: 200px;
-  }
-
-  .data_table dd {
-    text-align: center;
-    width: 200px;
-  }
-</style>
-
-<div class="row justify-content-center data_table">
+<div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="department" style="text-align: center">
+    <div *ngIf="department">
       <h2 data-cy="departmentDetailsHeading"><span>Department</span></h2>
 
       <hr />
@@ -32,17 +9,17 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details" style="text-align: center">
-        <dt class="col-md-6"><span>ID</span></dt>
-        <dd class="col-md-6">
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
           <span>{{ department.id }}</span>
         </dd>
-        <dt class="col-md-6"><span>Name</span></dt>
-        <dd class="col-md-6">
+        <dt><span>Name</span></dt>
+        <dd>
           <span>{{ department.name }}</span>
         </dd>
-        <dt class="col-md-6"><span>Targetsystem</span></dt>
-        <dd class="col-md-6">
+        <dt><span>Targetsystem</span></dt>
+        <dd>
           <span *ngFor="let targetsystem of department.targetsystems; let last = last">
             <a [routerLink]="['/targetsystem', targetsystem?.id, 'view']">{{ targetsystem.name }}</a
             >{{ last ? '' : ', ' }}

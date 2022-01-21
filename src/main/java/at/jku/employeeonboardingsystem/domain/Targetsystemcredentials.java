@@ -1,10 +1,12 @@
 package at.jku.employeeonboardingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * A Targetsystemcredentials.
@@ -19,12 +21,15 @@ public class Targetsystemcredentials implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Expose
     @Column(name = "id")
     private Long id;
 
+    @Expose
     @Column(name = "username")
     private String username;
 
+    @Expose
     @NotNull
     @Size(min = 6)
     @Column(name = "password", nullable = false)
@@ -35,6 +40,7 @@ public class Targetsystemcredentials implements Serializable {
     private Systemuser systemuser;
 
     @ManyToOne
+    @XmlTransient
     private Targetsystem targetsystem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -91,6 +97,7 @@ public class Targetsystemcredentials implements Serializable {
         return this;
     }
 
+    @XmlTransient
     public Targetsystem getTargetsystem() {
         return this.targetsystem;
     }

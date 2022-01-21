@@ -15,57 +15,33 @@
           <label class="form-control-label" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
         </div>
-      </div>
 
-      <div class="form-group">
-        <label class="form-control-label" for="field_type">Typ</label>
-        <select class="custom-select" [(ngModel)]="type" name="type" id="field_type" (change)="selectType($event.target)">
-          <option class="dropdown-item" disabled>auswählen</option>
-          <option class="dropdown-item" value="{{ x }}" *ngFor="let x of types">{{ x }}</option>
-        </select>
-        You selected {{ type }}
-      </div>
+        <div>
+          <div class="form-group">
+            <label class="form-control-label" for="field_type">Typ</label>
+            <select #C class="custom-select" name="type" id="field_type" data-cy="type" formControlName="type">
+              <option value="csv">CSV</option>
+              <option value="db">Datenbank</option>
+              <option value="ldap">LDAP</option>
+            </select>
+          </div>
 
-      <div *ngIf="type == 'CSV'">
-        <div *ngFor="let choice of attributes; let i = index" class="col-md-2">
-          <label>
-            <input type="checkbox" [value]="choice" (change)="onCheckChange()" [checked]="attributesBoolean[i]" />
-            {{ choice }}
-          </label>
+          <div *ngIf="C.value == 'db' || C.value == 'ldap'" class="form-group">
+            <label class="form-control-label" for="field_url">Url</label>
+            <input type="text" class="form-control" name="url" id="field_url" data-cy="url" formControlName="url" />
+          </div>
         </div>
-        <p></p>
-      </div>
-
-      <div *ngIf="type == 'Datenbank'">
-        <div class="form-group" [formGroup]="editForm">
-          <label class="form-control-label" for="field_url">Url</label>
-          <input type="text" class="form-control" name="url" id="field_url" data-cy="url" formControlName="url" [(ngModel)]="url" />
+        <div *ngIf="C.value == 'db' || C.value == 'ldap'" class="form-group">
+          <label class="form-control-label" for="field_password">Password</label>
+          <input type="text" class="form-control" name="password" id="field_password" data-cy="password" formControlName="password" />
         </div>
-        <div class="form-group">
+
+        <div *ngIf="C.value == 'db' || C.value == 'ldap'" class="form-group">
           <label class="form-control-label" for="field_username">Username</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            id="field_username"
-            data-cy="username"
-            formControlName="username"
-            [(ngModel)]="username"
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-control-label" for="field_pw">Password</label>
-          <input
-            type="text"
-            class="form-control"
-            name="password"
-            id="field_pw"
-            data-cy="password"
-            formControlName="password"
-            [(ngModel)]="password"
-          />
+          <input type="text" class="form-control" name="username" id="field_username" data-cy="username" formControlName="username" />
         </div>
       </div>
+
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
