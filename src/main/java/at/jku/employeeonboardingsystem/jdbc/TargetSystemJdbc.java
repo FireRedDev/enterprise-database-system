@@ -19,7 +19,7 @@ public class TargetSystemJdbc {
                 "CREATE TABLE TARGETSYSTEMCREDENTIALS " +
                 "(id LONG, " +
                 " USERNAME VARCHAR(255), " +
-                "PASSWORD VARCHAR2 (255)," +
+                "PASSWORD VARCHAR(255)," +
                 "SYSTEMUSER_ID BIGINT," +
                 "TARGETSYSTEM_ID LONG," +
                 " PRIMARY KEY ( SYSTEMUSER_ID))";
@@ -86,7 +86,7 @@ public class TargetSystemJdbc {
                 "CREATE TABLE TARGETSYSTEMCREDENTIALS " +
                 "(id LONG, " +
                 " USERNAME VARCHAR(255), " +
-                "PASSWORD VARCHAR2 (255)," +
+                "PASSWORD VARCHAR(255)," +
                 "SYSTEMUSER_ID BIGINT," +
                 "TARGETSYSTEM_ID LONG," +
                 " PRIMARY KEY ( SYSTEMUSER_ID))";
