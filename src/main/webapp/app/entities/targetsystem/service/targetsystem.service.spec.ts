@@ -22,6 +22,10 @@ describe('Targetsystem Service', () => {
     elemDefault = {
       id: 0,
       name: 'AAAAAAA',
+      type: 'AAAAAAA',
+      url: 'AAAAAAA',
+      password: 'AAAAAAA',
+      username: 'AAAAAAA',
     };
   });
 
@@ -58,6 +62,10 @@ describe('Targetsystem Service', () => {
         {
           id: 1,
           name: 'BBBBBB',
+          type: 'BBBBBB',
+          url: 'BBBBBB',
+          password: 'BBBBBB',
+          username: 'BBBBBB',
         },
         elemDefault
       );
@@ -75,6 +83,8 @@ describe('Targetsystem Service', () => {
       const patchObject = Object.assign(
         {
           name: 'BBBBBB',
+          type: 'BBBBBB',
+          url: 'BBBBBB',
         },
         new Targetsystem()
       );
@@ -95,6 +105,10 @@ describe('Targetsystem Service', () => {
         {
           id: 1,
           name: 'BBBBBB',
+          type: 'BBBBBB',
+          url: 'BBBBBB',
+          password: 'BBBBBB',
+          username: 'BBBBBB',
         },
         elemDefault
       );
@@ -146,7 +160,7 @@ describe('Targetsystem Service', () => {
       });
 
       it('should add only unique Targetsystem to an array', () => {
-        const targetsystemArray: ITargetsystem[] = [{ id: 123 }, { id: 456 }, { id: 58295 }];
+        const targetsystemArray: ITargetsystem[] = [{ id: 123 }, { id: 456 }, { id: 48230 }];
         const targetsystemCollection: ITargetsystem[] = [{ id: 123 }];
         expectedResult = service.addTargetsystemToCollectionIfMissing(targetsystemCollection, ...targetsystemArray);
         expect(expectedResult).toHaveLength(3);

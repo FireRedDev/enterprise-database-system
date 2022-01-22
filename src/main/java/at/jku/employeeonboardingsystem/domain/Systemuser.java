@@ -1,17 +1,17 @@
 package at.jku.employeeonboardingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * A Systemuser.
  */
-@XmlRootElement
 @Entity
 @Table(name = "systemuser")
 public class Systemuser implements Serializable {
@@ -19,6 +19,7 @@ public class Systemuser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Expose
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
@@ -27,15 +28,19 @@ public class Systemuser implements Serializable {
     @Column(name = "entry_date")
     private LocalDate entryDate;
 
+    @Expose
     @Column(name = "name")
     private String name;
 
+    @XmlTransient
     @Column(name = "social_security_number")
     private String socialSecurityNumber;
 
+    @XmlTransient
     @Column(name = "job_description")
     private String jobDescription;
 
+    @XmlTransient
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_systemuser__department",
@@ -60,6 +65,7 @@ public class Systemuser implements Serializable {
         this.id = id;
     }
 
+    @XmlTransient
     public LocalDate getEntryDate() {
         return this.entryDate;
     }
@@ -86,6 +92,7 @@ public class Systemuser implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
     public String getSocialSecurityNumber() {
         return this.socialSecurityNumber;
     }
@@ -99,6 +106,7 @@ public class Systemuser implements Serializable {
         this.socialSecurityNumber = socialSecurityNumber;
     }
 
+    @XmlTransient
     public String getJobDescription() {
         return this.jobDescription;
     }

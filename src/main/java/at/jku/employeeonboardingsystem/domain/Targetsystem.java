@@ -1,5 +1,6 @@
 package at.jku.employeeonboardingsystem.domain;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -15,26 +16,25 @@ public class Targetsystem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Expose
     @Column(name = "id")
     private Long id;
 
+    @Expose
     @Column(name = "name")
     private String name;
 
     @Column(name = "type")
-    private TargetSystemTypes systemTypes;
+    private String type;
 
-    @Column(name = "dbUrl")
-    private String dbUrl;
+    @Column(name = "url")
+    private String url;
 
-    @Column(name = "dbUser")
-    private String dbUser;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "dbPassword")
-    private String dbPassword;
-
-    @Column(name = "csvAttributes")
-    private String csvAttributes;
+    @Column(name = "username")
+    private String username;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -45,46 +45,6 @@ public class Targetsystem implements Serializable {
     public Targetsystem id(Long id) {
         this.setId(id);
         return this;
-    }
-
-    public TargetSystemTypes getSystemTypes() {
-        return systemTypes;
-    }
-
-    public String getDbUrl() {
-        return dbUrl;
-    }
-
-    public void setDbUrl(String dbUrl) {
-        this.dbUrl = dbUrl;
-    }
-
-    public String getDbUser() {
-        return dbUser;
-    }
-
-    public void setDbUser(String dbUser) {
-        this.dbUser = dbUser;
-    }
-
-    public String getDbPassword() {
-        return dbPassword;
-    }
-
-    public void setDbPassword(String dbPassword) {
-        this.dbPassword = dbPassword;
-    }
-
-    public String getCsvAttributes() {
-        return csvAttributes;
-    }
-
-    public void setCsvAttributes(String csvAttributes) {
-        this.csvAttributes = csvAttributes;
-    }
-
-    public void setSystemTypes(TargetSystemTypes systemTypes) {
-        this.systemTypes = systemTypes;
     }
 
     public void setId(Long id) {
@@ -102,6 +62,58 @@ public class Targetsystem implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public Targetsystem type(String type) {
+        this.setType(type);
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public Targetsystem url(String url) {
+        this.setUrl(url);
+        return this;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public Targetsystem password(String password) {
+        this.setPassword(password);
+        return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public Targetsystem username(String username) {
+        this.setUsername(username);
+        return this;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -129,6 +141,10 @@ public class Targetsystem implements Serializable {
         return "Targetsystem{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
+            ", url='" + getUrl() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", username='" + getUsername() + "'" +
             "}";
     }
 }

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { ITargetsystem, Targetsystem, TargetSystemTypes } from '../targetsystem.model';
+import { ITargetsystem, Targetsystem } from '../targetsystem.model';
 import { TargetsystemService } from '../service/targetsystem.service';
 
 @Component({
@@ -27,9 +27,9 @@ export class TargetsystemUpdateComponent implements OnInit {
     id: [],
     name: [],
     type: [],
-    dbUrl: [],
-    dbuser: [],
-    dbpassword: [],
+    url: [],
+    password: [],
+    username: [],
     csvAttributes: [],
   });
 
@@ -73,16 +73,16 @@ export class TargetsystemUpdateComponent implements OnInit {
 
   generateDbConnection(): void {
     const targetsystem = this.getTargetSystem();
-    if (targetsystem.id != null && targetsystem.dbUrl != null && targetsystem.dbuser != null && targetsystem.dbpassword != null) {
+    if (targetsystem.id != null && targetsystem.url != null && targetsystem.username != null && targetsystem.password != null) {
       location.href =
         'http://localhost:9000/api/targetsystemcredentials/database/' +
         targetsystem.id.toString() +
         '/' +
-        targetsystem.dbUrl +
+        targetsystem.url +
         ',' +
-        targetsystem.dbuser +
+        targetsystem.username +
         ',' +
-        targetsystem.dbpassword;
+        targetsystem.password;
     }
   }
 
@@ -109,7 +109,10 @@ export class TargetsystemUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: targetsystem.id,
       name: targetsystem.name,
-      typ: targetsystem.type,
+      type: targetsystem.type,
+      url: targetsystem.url,
+      password: targetsystem.password,
+      username: targetsystem.username,
     });
   }
 
@@ -118,41 +121,26 @@ export class TargetsystemUpdateComponent implements OnInit {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      type: TargetSystemTypes.Database,
-      dbUrl: this.editForm.get('url')?.value,
-      dbuser: this.editForm.get('username')?.value,
-      dbpassword: this.editForm.get('password')?.value,
-      csvAttributes: this.attributesFinal,
+      type: this.editForm.get(['type'])!.value,
+      url: this.editForm.get(['url'])!.value,
+      password: this.editForm.get(['password'])!.value,
+      username: this.editForm.get(['username'])!.value,
     };
   }
 
   protected createFromForm(): ITargetsystem {
-    let finalType = TargetSystemTypes.CSV;
-    switch (this.type) {
-      case 'CSV': {
-        finalType = TargetSystemTypes.CSV;
-
-        break;
-      }
-      case 'LDAB': {
-        finalType = TargetSystemTypes.LDAB;
-        break;
-      }
-      case 'Datenbank': {
-        finalType = TargetSystemTypes.Database;
-        this.generateDbConnection();
-        break;
-      }
+    if (this.editForm.get(['type'])!.value === 'db') {
+      this.generateDbConnection();
     }
+
     return {
       ...new Targetsystem(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      type: finalType,
-      dbUrl: this.editForm.get('url')?.value,
-      dbuser: this.editForm.get('username')?.value,
-      dbpassword: this.editForm.get('password')?.value,
-      csvAttributes: this.attributesFinal,
+      type: this.editForm.get(['type'])!.value,
+      url: this.editForm.get(['url'])!.value,
+      password: this.editForm.get(['password'])!.value,
+      username: this.editForm.get(['username'])!.value,
     };
   }
 }

@@ -42,6 +42,10 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type"><span>Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="url"><span>Url</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="password"><span>Password</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="username"><span>Username</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -51,7 +55,11 @@
             <a [routerLink]="['/targetsystem', targetsystem.id, 'view']">{{ targetsystem.id }}</a>
           </td>
           <td>{{ targetsystem.name }}</td>
-          <td class="right">
+          <td>{{ targetsystem.type }}</td>
+          <td>{{ targetsystem.url }}</td>
+          <td>{{ targetsystem.password }}</td>
+          <td>{{ targetsystem.username }}</td>
+          <td class="text-right">
             <div class="btn-group">
               <button
                 type="submit"

@@ -42,7 +42,18 @@ public class TargetsystemServiceImpl implements TargetsystemService {
                 if (targetsystem.getName() != null) {
                     existingTargetsystem.setName(targetsystem.getName());
                 }
-
+                if (targetsystem.getType() != null) {
+                    existingTargetsystem.setType(targetsystem.getType());
+                }
+                if (targetsystem.getUrl() != null) {
+                    existingTargetsystem.setUrl(targetsystem.getUrl());
+                }
+                if (targetsystem.getPassword() != null) {
+                    existingTargetsystem.setPassword(targetsystem.getPassword());
+                }
+                if (targetsystem.getUsername() != null) {
+                    existingTargetsystem.setUsername(targetsystem.getUsername());
+                }
                 return existingTargetsystem;
             })
             .map(targetsystemRepository::save);
