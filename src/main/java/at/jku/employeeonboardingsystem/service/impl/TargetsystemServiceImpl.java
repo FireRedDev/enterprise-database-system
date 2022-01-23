@@ -1,6 +1,7 @@
 package at.jku.employeeonboardingsystem.service.impl;
 
 import at.jku.employeeonboardingsystem.domain.Targetsystem;
+import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
 import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
 import at.jku.employeeonboardingsystem.service.TargetsystemService;
 import java.util.Optional;
@@ -29,6 +30,13 @@ public class TargetsystemServiceImpl implements TargetsystemService {
     @Override
     public Targetsystem save(Targetsystem targetsystem) {
         log.debug("Request to save Targetsystem : {}", targetsystem);
+        if (targetsystem.getType().equals("db")) {
+            try {
+                TargetSystemJdbc.copyDatabaseData(targetsystem.getUrl(), targetsystem.getUsername(), targetsystem.getPassword());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return targetsystemRepository.save(targetsystem);
     }
 

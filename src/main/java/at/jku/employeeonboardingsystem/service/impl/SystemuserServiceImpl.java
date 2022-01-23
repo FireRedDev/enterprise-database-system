@@ -2,12 +2,15 @@ package at.jku.employeeonboardingsystem.service.impl;
 
 import at.jku.employeeonboardingsystem.domain.Department;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
+import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
 import at.jku.employeeonboardingsystem.repository.DepartmentRepository;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
 import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import java.io.Console;
+import java.sql.SQLException;
 import java.util.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.detDSA;
@@ -66,6 +69,23 @@ public class SystemuserServiceImpl implements SystemuserService {
                             targetsystemcredentials.setPassword(generatedString);
                             targetsystemcredentials.setTargetsystem(t);
                             credentials.add(targetsystemcredentials);
+
+                            if (
+                                targetsystemcredentials.getTargetsystem() != null &&
+                                targetsystemcredentials.getTargetsystem().getType().equals("db")
+                            ) {
+                                Targetsystem targetsystem = targetsystemcredentials.getTargetsystem();
+                                try {
+                                    TargetSystemJdbc.insertIntoDatabase(
+                                        targetsystem.getUrl(),
+                                        targetsystem.getUsername(),
+                                        targetsystem.getPassword(),
+                                        targetsystemcredentials
+                                    );
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     });
             });
@@ -78,10 +98,11 @@ public class SystemuserServiceImpl implements SystemuserService {
     @Override
     public Optional<Systemuser> partialUpdate(Systemuser systemuser) {
         log.debug("Request to partially update Systemuser : {}", systemuser);
-
+        System.out.println("partial update");
         return systemuserRepository
             .findById(systemuser.getId())
             .map(existingSystemuser -> {
+                System.out.println("in map");
                 if (systemuser.getEntryDate() != null) {
                     existingSystemuser.setEntryDate(systemuser.getEntryDate());
                 }
@@ -94,7 +115,6 @@ public class SystemuserServiceImpl implements SystemuserService {
                 if (systemuser.getJobDescription() != null) {
                     existingSystemuser.setJobDescription(systemuser.getJobDescription());
                 }
-
                 return existingSystemuser;
             })
             .map(systemuserRepository::save);
@@ -123,7 +143,17 @@ public class SystemuserServiceImpl implements SystemuserService {
         log.debug("Request to delete Systemuser : {}", id);
         Systemuser systemuser = systemuserRepository.findById(id).orElseThrow();
         List<Targetsystemcredentials> cre = targetsystemcredentialsRepository.findBySystemuser(systemuser);
-        cre.forEach(c -> targetsystemcredentialsRepository.delete(c));
+        for (Targetsystemcredentials c : cre) {
+            if (c.getTargetsystem() != null && c.getTargetsystem().getType().equals("db")) {
+                Targetsystem targetsystem = c.getTargetsystem();
+                try {
+                    TargetSystemJdbc.deleteFromDatabase(targetsystem.getUrl(), targetsystem.getUsername(), targetsystem.getPassword(), c);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            targetsystemcredentialsRepository.delete(c);
+        }
         systemuserRepository.deleteById(id);
     }
 

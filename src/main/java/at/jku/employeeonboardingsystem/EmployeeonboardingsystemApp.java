@@ -79,12 +79,6 @@ public class EmployeeonboardingsystemApp {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
-
-        try {
-            TargetSystemJdbc.copyDatabaseData();
-        } catch (final Exception e) {
-            System.out.println("No Database! Error " + e);
-        }
     }
 
     private static void logApplicationStartup(Environment env) {
