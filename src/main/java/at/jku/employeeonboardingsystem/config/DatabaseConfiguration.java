@@ -47,13 +47,6 @@ public class DatabaseConfiguration {
         return H2ConfigurationHelper.createServer(port);
     }
 
-    @Bean(name = "primaryDataSource")
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public HikariDataSource primaryDataSource(DataSourceProperties properties) {
-        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
-    }
-
     private String getValidPortForH2() {
         int port = Integer.parseInt(env.getProperty("server.port"));
         if (port < 10000) {
