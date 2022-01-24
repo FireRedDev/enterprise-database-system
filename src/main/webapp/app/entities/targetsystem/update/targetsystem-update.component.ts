@@ -45,7 +45,18 @@ export class TargetsystemUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  onCheckChange(): void {
+  onCheckChange2(): void {
+    for (let i = 0; i < this.attributesBoolean.length; i++) {
+      if (!this.attributesBoolean[i]) {
+        this.attributesFinal[i] = '';
+      } else {
+        this.attributesFinal[i] = this.attributes[i];
+      }
+    }
+  }
+
+  onCheckChange(checked: boolean, id: number): void {
+    this.attributesBoolean[id] = checked;
     for (let i = 0; i < this.attributesBoolean.length; i++) {
       if (!this.attributesBoolean[i]) {
         this.attributesFinal[i] = '';

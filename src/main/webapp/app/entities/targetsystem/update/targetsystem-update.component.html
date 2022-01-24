@@ -30,7 +30,13 @@
         <div *ngIf="C.value == 'csv'">
           <div *ngFor="let choice of attributes; let i = index" class="col-md-2">
             <label>
-              <input type="checkbox" [value]="choice" (change)="onCheckChange()" [checked]="attributesBoolean[i]" />
+              <input
+                #onchecked
+                type="checkbox"
+                [value]="choice"
+                (change)="onCheckChange(onchecked.checked, i)"
+                [checked]="attributesBoolean[i]"
+              />
               {{ choice }}
             </label>
           </div>
