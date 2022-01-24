@@ -1,6 +1,8 @@
 package at.jku.employeeonboardingsystem.jdbc;
 
+import at.jku.employeeonboardingsystem.domain.Department;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.domain.Targetsystemcredentials;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,10 +11,10 @@ import org.bouncycastle.openssl.PasswordException;
 
 public class TargetSystemJdbc {
 
-    //Databaseexample: Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","test","test");
+    //Database 1:jdbc:mysql://localhost:3306/test test test
+    //Database 2: jdbc:mysql://localhost:3306/sys test test
     public static void copyDatabaseData(String url, String username, String password) throws SQLException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             Connection connection2 = DriverManager.getConnection(url, username, password);
             Statement stmt2 = connection2.createStatement();
             String createTable =
@@ -26,35 +28,9 @@ public class TargetSystemJdbc {
             try {
                 stmt2.executeUpdate(createTable);
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("Table targetsystemcredentials already exists");
             }
-            /*     PreparedStatement stmt3 = connection2.prepareStatement(
-                "INSERT IGNORE INTO TARGETSYSTEMCREDENTIALS(" + "ID,USERNAME,PASSWORD,SYSTEMUSER_ID,TARGETSYSTEM_ID) VALUES (?,?,?,?,?)"
-            );
-            ResultSet rs = stmt.executeQuery(getSystemCredentials);
-            //if (checkPassword(rs.getString(3))) {
-                System.out.println("in if ");
-                while (rs.next()) {
-                    System.out.println("in while");
-                    Long id = rs.getLong(1);
-                    stmt3.setLong(1, id);
-                    String uname = (rs.getString(2));
-                    stmt3.setString(2, uname);
-                    String pword = rs.getString(3);
-                    stmt3.setString(3, pword);
-                    Long userId = rs.getLong(4);
-                    stmt3.setLong(4, userId);
-                    Long targetsystemId = rs.getLong(5);
-                    stmt3.setLong(5, targetsystemId);
-                    System.out.println("end of if ");
-
-                    stmt3.executeUpdate();
-                    System.out.println("sucessfully executedUpdate ");
-                }
-           /* } else {
-                throw new PasswordException("Das Passwort ist nicht sicher genug");
-            }*/
-        } catch (SQLException | ClassNotFoundException e) { // | PasswordException e) {
+        } catch (SQLException e) { // | PasswordException e) {
             System.out.println(e);
         }
     }
@@ -83,22 +59,23 @@ public class TargetSystemJdbc {
     public static void insertIntoDatabase(String url, String username, String password, Targetsystemcredentials credentials)
         throws SQLException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             Connection connection2 = DriverManager.getConnection(url, username, password);
             String insert =
                 "INSERT INTO TARGETSYSTEMCREDENTIALS(" + "ID,USERNAME,PASSWORD,SYSTEMUSER_ID,TARGETSYSTEM_ID) VALUES (?,?,?,?,?)";
             PreparedStatement stmt = connection2.prepareStatement(insert);
-            Long id = credentials.getSystemuser().getId();
-            stmt.setLong(1, id);
-            String usernameTc = credentials.getUsername();
-            stmt.setString(2, usernameTc);
-            String passwordTc = credentials.getPassword();
-            stmt.setString(3, passwordTc);
-            Long userId = credentials.getSystemuser().getId();
-            stmt.setLong(4, userId);
-            Long targetSystemId = credentials.getTargetsystem().getId();
-            stmt.setLong(5, targetSystemId);
-            stmt.executeUpdate();
+            if (checkPassword(credentials.getPassword())) {
+                Long id = credentials.getSystemuser().getId();
+                stmt.setLong(1, id);
+                String usernameTc = credentials.getUsername();
+                stmt.setString(2, usernameTc);
+                String passwordTc = credentials.getPassword();
+                stmt.setString(3, passwordTc);
+                Long userId = credentials.getSystemuser().getId();
+                stmt.setLong(4, userId);
+                Long targetSystemId = credentials.getTargetsystem().getId();
+                stmt.setLong(5, targetSystemId);
+                stmt.executeUpdate();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -106,7 +83,6 @@ public class TargetSystemJdbc {
 
     public static void deleteFromDatabase(String url, String username, String password, Targetsystemcredentials credentials) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection(url, username, password);
             Long id = credentials.getSystemuser().getId();
             String delete = "DELETE FROM TARGETSYSTEMCREDENTIALS WHERE ID =" + id;
@@ -117,16 +93,19 @@ public class TargetSystemJdbc {
         }
     }
 
-    public static void deleteFromDatabaseWithUser(String url, String username, String password, Systemuser user) {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, username, password);
-            Long id = user.getId();
-            String delete = "DELETE FROM TARGETSYSTEMCREDENTIALS WHERE ID =" + id;
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(delete);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void deleteFromDatabaseWithUser(Department d, Systemuser user) {
+        for (Targetsystem t : d.getTargetsystems()) {
+            if (t != null && t.getType().equals("db")) {
+                try {
+                    Connection con = DriverManager.getConnection(t.getUrl(), t.getUsername(), t.getPassword());
+                    Long id = user.getId();
+                    String delete = "DELETE FROM TARGETSYSTEMCREDENTIALS WHERE ID =" + id;
+                    Statement stmt = con.createStatement();
+                    stmt.executeUpdate(delete);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 }

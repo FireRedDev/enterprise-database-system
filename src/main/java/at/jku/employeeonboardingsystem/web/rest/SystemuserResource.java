@@ -1,6 +1,9 @@
 package at.jku.employeeonboardingsystem.web.rest;
 
+import at.jku.employeeonboardingsystem.domain.Department;
 import at.jku.employeeonboardingsystem.domain.Systemuser;
+import at.jku.employeeonboardingsystem.domain.Targetsystem;
+import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
 import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
@@ -13,10 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -171,6 +171,17 @@ public class SystemuserResource {
         @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to update Systemuser : {}, {}", id, systemuser);
+        Optional<Systemuser> user = systemuserService.findOne(id);
+        List<Systemuser> users = user.map(Collections::singletonList).orElseGet(Collections::emptyList);
+        for (Department d : users.get(0).getDepartments()) {
+            if (!systemuser.getDepartments().contains(d)) {
+                try {
+                    TargetSystemJdbc.deleteFromDatabaseWithUser(d, users.get(0));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
         if (systemuser.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -207,6 +218,7 @@ public class SystemuserResource {
         @RequestBody Systemuser systemuser
     ) throws URISyntaxException {
         log.debug("REST request to partial update Systemuser partially : {}, {}", id, systemuser);
+        System.out.println("IN partialUpdate SYSTEMUSER");
         if (systemuser.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -219,6 +231,7 @@ public class SystemuserResource {
         }
 
         Optional<Systemuser> result = systemuserService.partialUpdate(systemuser);
+        System.out.println("IN partialUpdate SYSTEMUSER");
 
         return ResponseUtil.wrapOrNotFound(
             result,

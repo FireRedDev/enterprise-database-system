@@ -50,7 +50,6 @@ public class SystemuserServiceImpl implements SystemuserService {
     public Systemuser save(Systemuser systemuser) {
         log.debug("Request to save Systemuser : {}", systemuser);
         Systemuser sys = systemuserRepository.save(systemuser);
-
         List<Targetsystemcredentials> credentials = new ArrayList<>();
         systemuser
             .getDepartments()
