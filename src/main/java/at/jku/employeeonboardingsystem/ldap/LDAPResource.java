@@ -6,6 +6,21 @@ import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
 import at.jku.employeeonboardingsystem.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,22 +38,6 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 /**
  * REST controller for managing {@link Systemuser}.
  */
@@ -55,28 +54,33 @@ public class LDAPResource {
 
     private final LDAPRepository ldapRepository;
 
-    public LDAPResource(
-        LDAPRepository ldapRepository
-    ) {
-        this.ldapRepository= ldapRepository;
+    public LDAPResource(LDAPRepository ldapRepository) {
+        this.ldapRepository = ldapRepository;
     }
 
     @GetMapping("ldap/users/{id}")
-    public Person findOneLDAPUser(@PathVariable Optional<String> id){
+    public Person findOneLDAPUser(@PathVariable Optional<String> id) {
         return id.map(ldapRepository::findPerson).orElse(null);
     }
-    @GetMapping("ldap/users/")
-    public List<Person> findAllLDAPUser(){
+
+    @GetMapping("ldap/users/delete/{id}")
+    public List<Person> deleteAndFindUser(@PathVariable Optional<String> id) {
+        ldapRepository.deletePerson(id);
         return ldapRepository.getAllPersons();
     }
-    @PostMapping("ldap/users/{id}")
-    public void updateOrCreateOneLDAPUser(@PathVariable Optional<String> id) {
-        ldapRepository.updatePerson(id);
 
+    @GetMapping("ldap/users/")
+    public List<Person> findAllLDAPUser() {
+        return ldapRepository.getAllPersons();
     }
-    @DeleteMapping("ldap/users/{id}")
+
+    @PostMapping("ldap/users/{person}")
+    public void updateOrCreateOneLDAPUser(@PathVariable Optional<Person> person) {
+        ldapRepository.updatePerson(person);
+    }
+
+    @DeleteMapping("ldap/users/delete/{id}")
     public void deleteOneLDAPUser(@PathVariable Optional<String> id) {
         ldapRepository.deletePerson(id);
     }
-
 }
