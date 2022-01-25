@@ -329,6 +329,13 @@
             <groupId>com.unboundid</groupId>
             <artifactId>unboundid-ldapsdk</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.20</version>
+        </dependency>
       </dependencies>
 
     <build>
@@ -424,12 +431,6 @@
                             <groupId>io.spring.nohttp</groupId>
                             <artifactId>nohttp-checkstyle</artifactId>
                             <version>${nohttp-checkstyle.version}</version>
-                        </dependency>
-                        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-                        <dependency>
-                            <groupId>mysql</groupId>
-                            <artifactId>mysql-connector-java</artifactId>
-                            <version>8.0.28</version>
                         </dependency>
                     </dependencies>
                     <configuration>
