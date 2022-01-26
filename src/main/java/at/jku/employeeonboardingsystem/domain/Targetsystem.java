@@ -36,6 +36,9 @@ public class Targetsystem implements Serializable {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "csvAttributes")
+    private String csvAttributes;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -116,6 +119,19 @@ public class Targetsystem implements Serializable {
         this.username = username;
     }
 
+    public Targetsystem csvAttributes(String csvAttributes) {
+        this.setCsvAttributes(csvAttributes);
+        return this;
+    }
+
+    public String getCsvAttributes() {
+        return csvAttributes;
+    }
+
+    public void setCsvAttributes(String csvAttributes) {
+        this.csvAttributes = csvAttributes;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -145,6 +161,7 @@ public class Targetsystem implements Serializable {
             ", url='" + getUrl() + "'" +
             ", password='" + getPassword() + "'" +
             ", username='" + getUsername() + "'" +
+            ",csvAttributes='"+getCsvAttributes()+"'"+
             "}";
     }
 }

@@ -19,7 +19,8 @@ export class TargetsystemUpdateComponent implements OnInit {
   url = 'EMPTY';
   username = '';
   password = '';
-  attributes = ['User ID', 'Username', 'Passwort', 'Systemuser', 'Targetsystem'];
+  attributes = ['id', 'username', 'password', 'Systemuser', 'Targetsystem'];
+  attributesString = '';
   attributesFinal = this.attributes;
   attributesBoolean = [true, true, true, true, true];
   tryin: any;
@@ -56,11 +57,13 @@ export class TargetsystemUpdateComponent implements OnInit {
   }
 
   onCheckChange(checked: boolean, id: number): void {
+    this.attributesString = '';
     this.attributesBoolean[id] = checked;
     for (let i = 0; i < this.attributesBoolean.length; i++) {
       if (!this.attributesBoolean[i]) {
         this.attributesFinal[i] = '';
       } else {
+        this.attributesString += this.attributes[i] + ',';
         this.attributesFinal[i] = this.attributes[i];
       }
     }
@@ -124,6 +127,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       url: targetsystem.url,
       password: targetsystem.password,
       username: targetsystem.username,
+      csvAttribute: targetsystem.csvAttributes,
     });
   }
 
@@ -136,6 +140,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       url: this.editForm.get(['url'])!.value,
       password: this.editForm.get(['password'])!.value,
       username: this.editForm.get(['username'])!.value,
+      csvAttributes: this.attributesString,
     };
   }
 
@@ -152,6 +157,7 @@ export class TargetsystemUpdateComponent implements OnInit {
       url: this.editForm.get(['url'])!.value,
       password: this.editForm.get(['password'])!.value,
       username: this.editForm.get(['username'])!.value,
+      csvAttributes: this.attributesString,
     };
   }
 }

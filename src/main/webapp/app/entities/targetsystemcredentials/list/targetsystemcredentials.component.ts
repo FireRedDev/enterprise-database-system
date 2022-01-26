@@ -57,7 +57,8 @@ export class TargetsystemcredentialsComponent implements OnInit {
   }
 
   downloadCsv(targetsystem: ITargetsystem): void {
-    location.href = 'http://localhost:9000/api/targetsystemcredentials/csv/' + targetsystem.id!.toString();
+    location.href =
+      'http://localhost:9000/api/targetsystemcredentials/csv/' + targetsystem.id!.toString() + '/' + targetsystem.csvAttributes!.toString();
   }
 
   ngOnInit(): void {

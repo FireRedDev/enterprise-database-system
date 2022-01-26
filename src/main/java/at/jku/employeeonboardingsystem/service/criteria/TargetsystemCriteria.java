@@ -3,11 +3,7 @@ package at.jku.employeeonboardingsystem.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -38,6 +34,8 @@ public class TargetsystemCriteria implements Serializable, Criteria {
 
     private Boolean distinct;
 
+    private StringFilter csvAttributes;
+
     public TargetsystemCriteria() {}
 
     public TargetsystemCriteria(TargetsystemCriteria other) {
@@ -47,6 +45,7 @@ public class TargetsystemCriteria implements Serializable, Criteria {
         this.url = other.url == null ? null : other.url.copy();
         this.password = other.password == null ? null : other.password.copy();
         this.username = other.username == null ? null : other.username.copy();
+        this.csvAttributes = other.csvAttributes == null ? null : other.csvAttributes.copy();
         this.distinct = other.distinct;
     }
 
@@ -83,6 +82,21 @@ public class TargetsystemCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getCsvAttributes() {
+        return csvAttributes;
+    }
+
+    public StringFilter csvAttributes() {
+        if (csvAttributes == null) {
+            csvAttributes = new StringFilter();
+        }
+        return csvAttributes;
+    }
+
+    public void setCsvAttributes(StringFilter csvAttributes) {
+        this.csvAttributes = csvAttributes;
     }
 
     public StringFilter getType() {
@@ -169,13 +183,14 @@ public class TargetsystemCriteria implements Serializable, Criteria {
             Objects.equals(url, that.url) &&
             Objects.equals(password, that.password) &&
             Objects.equals(username, that.username) &&
-            Objects.equals(distinct, that.distinct)
+            Objects.equals(distinct, that.distinct) &&
+            Objects.equals(csvAttributes, that.csvAttributes)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, type, url, password, username, distinct);
+        return Objects.hash(id, name, type, url, password, username, distinct, csvAttributes);
     }
 
     // prettier-ignore
@@ -189,6 +204,7 @@ public class TargetsystemCriteria implements Serializable, Criteria {
             (password != null ? "password=" + password + ", " : "") +
             (username != null ? "username=" + username + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
+            (csvAttributes != null ? "csvAttribute=" + csvAttributes +", ":"")+
             "}";
     }
 }
