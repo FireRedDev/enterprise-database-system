@@ -31,7 +31,7 @@ services:
     container_name: openldap
     environment:
       - LDAP_ORGANISATION="JKU"
-      - LDAP_DOMAIN=jku.at
+      - LDAP_DOMAIN=memorynotfound.com
     ports:
       - '389:389'
 

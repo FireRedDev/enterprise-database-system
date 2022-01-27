@@ -22,7 +22,9 @@ import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.core.support.BaseLdapNameAware;
+import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.ldap.support.LdapUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,10 +34,18 @@ public class LDAPRepository implements BaseLdapNameAware {
         this.baseLdapPath = baseLdapPath;
     }
 
+    public void setLdapTemplate(LdapTemplate ldapTemplate) {
+        this.ldapTemplate = ldapTemplate;
+    }
+
     private final Logger log = LoggerFactory.getLogger(LDAPRepository.class);
 
-    @Autowired
     private LdapTemplate ldapTemplate;
+
+    @Autowired
+    public LDAPRepository(LdapTemplate ldapTemplate) {
+        this.ldapTemplate = ldapTemplate;
+    }
 
     private LdapName baseLdapPath;
     String ldapName = "dc=memorynotfound,dc=com";
@@ -49,19 +59,9 @@ public class LDAPRepository implements BaseLdapNameAware {
         ldapTemplate.bind(dn, null, buildAttributes(p));
     }
 
-    public List<String> getAllPersonNames() {
-        return ldapTemplate.search(
-            query().where("objectclass").is("person"),
-            new AttributesMapper<String>() {
-                public String mapFromAttributes(Attributes attrs) throws NamingException {
-                    return (String) attrs.get("cn").get();
-                }
-            }
-        );
-    }
-
     public List<Person> getAllPersons() {
-        return ldapTemplate.search(query().where("objectclass").is("person"), new PersonAttributesMapper());
+        EqualsFilter filter = new EqualsFilter("objectclass", "person");
+        return ldapTemplate.search(LdapUtils.emptyLdapName(), filter.encode(), new PersonContextMapper());
     }
 
     public Person findPerson(String uid) {
