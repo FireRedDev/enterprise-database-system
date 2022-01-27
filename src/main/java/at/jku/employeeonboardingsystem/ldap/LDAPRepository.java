@@ -22,7 +22,9 @@ import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.core.support.BaseLdapNameAware;
+import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.ldap.support.LdapUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,8 +63,11 @@ public class LDAPRepository implements BaseLdapNameAware {
     }
 
     public List<Person> getAllPersons() {
-        return ldapTemplate.search(query().where("objectclass").is("person"), new PersonAttributesMapper());
+        EqualsFilter filter = new EqualsFilter("objectclass", "person");
+        return ldapTemplate.search(LdapUtils.emptyLdapName(), filter.encode(), new PersonContextMapper());
     }
+
+    //return ldapTemplate.search(query().where("objectclass").is("person"), new PersonAttributesMapper());
 
     public Person findPerson(String uid) {
         Name dn = LdapNameBuilder.newInstance(ldapName).add("ou", "people").add("uid", uid).build();

@@ -1,5 +1,6 @@
 package at.jku.employeeonboardingsystem.ldap;
 
+import liquibase.pro.packaged.p;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -28,6 +29,10 @@ public class StartupLDAPConfiguration {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
+        Person p = new Person("h", "h");
+        p.setUid("H");
+        p.setPassword("H");
+        ldapRepository.create(p);
         System.out.println("EMBEDDED LDAP TEST: " + ldapRepository.getAllPersons().toString());
     }
 }
