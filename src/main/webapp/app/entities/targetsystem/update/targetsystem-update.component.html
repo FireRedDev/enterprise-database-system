@@ -24,6 +24,8 @@
             <option value="csv">CSV</option>
             <option value="db">Datenbank</option>
             <option value="ldap">LDAP</option>
+            <option value="xml">XML</option>
+            <option value="json">JSON</option>
           </select>
         </div>
 
@@ -43,7 +45,7 @@
           <p></p>
         </div>
 
-        <div *ngIf="C.value == 'db'">
+        <div *ngIf="C.value == 'db' || C.value == 'ldap'">
           <div class="form-group" [formGroup]="editForm">
             <label class="form-control-label" for="field_url">Url</label>
             <input type="text" class="form-control" name="url" id="field_url" data-cy="url" formControlName="url" [(ngModel)]="url" />
@@ -73,6 +75,7 @@
             />
           </div>
         </div>
+
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
             <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>

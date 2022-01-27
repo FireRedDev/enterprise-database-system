@@ -46,6 +46,7 @@
           <th scope="col" jhiSortBy="url"><span>Url</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="password"><span>Password</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="username"><span>Username</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="csv_attributes"><span>CSV Attribute</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -59,6 +60,7 @@
           <td>{{ targetsystem.url }}</td>
           <td>{{ targetsystem.password }}</td>
           <td>{{ targetsystem.username }}</td>
+          <td>{{ targetsystem.csvAttributes }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

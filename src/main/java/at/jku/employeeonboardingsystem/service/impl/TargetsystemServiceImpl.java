@@ -62,6 +62,9 @@ public class TargetsystemServiceImpl implements TargetsystemService {
                 if (targetsystem.getUsername() != null) {
                     existingTargetsystem.setUsername(targetsystem.getUsername());
                 }
+                if (targetsystem.getCsvAttributes() != null) {
+                    existingTargetsystem.setCsvAttributes(targetsystem.getCsvAttributes());
+                }
                 return existingTargetsystem;
             })
             .map(targetsystemRepository::save);

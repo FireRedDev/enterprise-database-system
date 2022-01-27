@@ -26,6 +26,7 @@ describe('Targetsystem Service', () => {
       url: 'AAAAAAA',
       password: 'AAAAAAA',
       username: 'AAAAAAA',
+      csvAttributes: 'AAAAAAA',
     };
   });
 
@@ -66,6 +67,7 @@ describe('Targetsystem Service', () => {
           url: 'BBBBBB',
           password: 'BBBBBB',
           username: 'BBBBBB',
+          csvAttributes: 'BBBBBB',
         },
         elemDefault
       );
@@ -109,6 +111,7 @@ describe('Targetsystem Service', () => {
           url: 'BBBBBB',
           password: 'BBBBBB',
           username: 'BBBBBB',
+          csvAttributes: 'BBBBBB',
         },
         elemDefault
       );

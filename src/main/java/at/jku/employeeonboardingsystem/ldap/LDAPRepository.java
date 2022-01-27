@@ -34,10 +34,18 @@ public class LDAPRepository implements BaseLdapNameAware {
         this.baseLdapPath = baseLdapPath;
     }
 
+    public void setLdapTemplate(LdapTemplate ldapTemplate) {
+        this.ldapTemplate = ldapTemplate;
+    }
+
     private final Logger log = LoggerFactory.getLogger(LDAPRepository.class);
 
-    @Autowired
     private LdapTemplate ldapTemplate;
+
+    @Autowired
+    public LDAPRepository(LdapTemplate ldapTemplate) {
+        this.ldapTemplate = ldapTemplate;
+    }
 
     private LdapName baseLdapPath;
     String ldapName = "dc=memorynotfound,dc=com";
@@ -49,17 +57,6 @@ public class LDAPRepository implements BaseLdapNameAware {
     public void create(Person p) {
         Name dn = buildDn(p);
         ldapTemplate.bind(dn, null, buildAttributes(p));
-    }
-
-    public List<String> getAllPersonNames() {
-        return ldapTemplate.search(
-            query().where("objectclass").is("person"),
-            new AttributesMapper<String>() {
-                public String mapFromAttributes(Attributes attrs) throws NamingException {
-                    return (String) attrs.get("cn").get();
-                }
-            }
-        );
     }
 
     public List<Person> getAllPersons() {

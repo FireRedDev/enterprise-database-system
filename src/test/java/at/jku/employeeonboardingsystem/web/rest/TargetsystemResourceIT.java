@@ -46,6 +46,9 @@ class TargetsystemResourceIT {
     private static final String DEFAULT_USERNAME = "AAAAAAAAAA";
     private static final String UPDATED_USERNAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CSVATTRIBUTES = "AAAAAAAAAA";
+    private static final String UPDATED_CSVATTRIBUTES = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/targetsystems";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -75,7 +78,8 @@ class TargetsystemResourceIT {
             .type(DEFAULT_TYPE)
             .url(DEFAULT_URL)
             .password(DEFAULT_PASSWORD)
-            .username(DEFAULT_USERNAME);
+            .username(DEFAULT_USERNAME)
+            .csvAttributes(DEFAULT_CSVATTRIBUTES);
         return targetsystem;
     }
 
@@ -91,7 +95,8 @@ class TargetsystemResourceIT {
             .type(UPDATED_TYPE)
             .url(UPDATED_URL)
             .password(UPDATED_PASSWORD)
-            .username(UPDATED_USERNAME);
+            .username(UPDATED_USERNAME)
+            .csvAttributes(UPDATED_CSVATTRIBUTES);
         return targetsystem;
     }
 
@@ -164,7 +169,8 @@ class TargetsystemResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)))
             .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD)))
-            .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME)));
+            .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME)))
+            .andExpect(jsonPath("$.[*].csvAttributes").value(hasItem(DEFAULT_CSVATTRIBUTES)));
     }
 
     @Test

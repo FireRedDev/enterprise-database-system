@@ -5,7 +5,6 @@ import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
 import at.jku.employeeonboardingsystem.service.criteria.TargetsystemCriteria;
 import java.util.List;
-import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -99,6 +98,9 @@ public class TargetsystemQueryService extends QueryService<Targetsystem> {
             }
             if (criteria.getUsername() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUsername(), Targetsystem_.username));
+            }
+            if (criteria.getCsvAttributes() != null) {
+                specification = specification.and(buildSpecification(criteria.getCsvAttributes(), Targetsystem_.csvAttributes));
             }
         }
         return specification;
