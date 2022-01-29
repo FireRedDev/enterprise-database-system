@@ -44,20 +44,20 @@
         <dd>
           <span>{{ targetsystem.type }}</span>
         </dd>
-        <dt><span>Url</span></dt>
-        <dd>
+        <dt *ngIf="targetsystem.type == 'db'"><span>Url</span></dt>
+        <dd *ngIf="targetsystem.type == 'db'">
           <span>{{ targetsystem.url }}</span>
         </dd>
-        <dt><span>Password</span></dt>
-        <dd>
+        <dt *ngIf="targetsystem.type == 'db'"><span>Password</span></dt>
+        <dd *ngIf="targetsystem.type == 'db'">
           <span>{{ targetsystem.password }}</span>
         </dd>
-        <dt><span>Username</span></dt>
-        <dd>
+        <dt *ngIf="targetsystem.type == 'db'"><span>Username</span></dt>
+        <dd *ngIf="targetsystem.type == 'db'">
           <span>{{ targetsystem.username }}</span>
         </dd>
-        <dt><span>CSV Attributes</span></dt>
-        <dd>
+        <dt *ngIf="targetsystem.type == 'csv'"><span>CSV Attributes</span></dt>
+        <dd *ngIf="targetsystem.type == 'csv'">
           <span>{{ targetsystem.csvAttributes }}</span>
         </dd>
       </dl>

@@ -10,6 +10,8 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { TargetsystemService } from '../service/targetsystem.service';
 import { TargetsystemDeleteDialogComponent } from '../delete/targetsystem-delete-dialog.component';
 import { MainComponent } from '../../../layouts/main/main.component';
+import { DepartmentComponent } from '../../department/list/department.component';
+import { IDepartment } from '../../department/department.model';
 
 @Component({
   selector: 'jhi-targetsystem',
@@ -23,6 +25,7 @@ export class TargetsystemComponent implements OnInit {
   page?: number;
   predicate!: string;
   ascending!: boolean;
+  departments?: IDepartment[];
   ngbPaginationPage = 1;
 
   constructor(
