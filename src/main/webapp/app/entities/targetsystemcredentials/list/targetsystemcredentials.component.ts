@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITargetsystemcredentials } from '../targetsystemcredentials.model';
 
@@ -11,6 +11,7 @@ import { TargetsystemcredentialsService } from '../service/targetsystemcredentia
 import { TargetsystemcredentialsDeleteDialogComponent } from '../delete/targetsystemcredentials-delete-dialog.component';
 import { MainComponent } from '../../../layouts/main/main.component';
 import { ITargetsystem } from '../../targetsystem/targetsystem.model';
+import { doc } from 'prettier';
 
 @Component({
   selector: 'jhi-targetsystemcredentials',
@@ -27,7 +28,9 @@ export class TargetsystemcredentialsComponent implements OnInit {
   ngbPaginationPage = 1;
 
   constructor(
+    protected activeModal: NgbActiveModal,
     protected targetsystemcredentialsService: TargetsystemcredentialsService,
+    protected newService: TargetsystemcredentialsService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected modalService: NgbModal,
@@ -56,6 +59,22 @@ export class TargetsystemcredentialsComponent implements OnInit {
       );
   }
 
+  removeDouble(): void {
+    let deleted = false;
+    for (let i = 0; i < this.targetsystemcredentials!.length; i++) {
+      this.targetsystemcredentials?.forEach(cred => {
+        if (
+          !deleted &&
+          this.targetsystemcredentials![i].id !== cred.id &&
+          this.targetsystemcredentials![i].systemuser?.id === cred.systemuser?.id
+        ) {
+          this.instanddelete(this.targetsystemcredentials![i].id);
+          deleted = true;
+        }
+      });
+    }
+  }
+
   downloadCsv(targetsystem: ITargetsystem): void {
     location.href =
       'http://localhost:8080/api/targetsystemcredentials/csv/' + targetsystem.id!.toString() + '/' + targetsystem.csvAttributes!.toString();
@@ -70,6 +89,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
   ngOnInit(): void {
     this.handleNavigation();
     this.main.showFooter = true;
+    this.removeDouble();
   }
 
   trackId(index: number, item: ITargetsystemcredentials): number {
@@ -85,6 +105,15 @@ export class TargetsystemcredentialsComponent implements OnInit {
         this.loadPage();
       }
     });
+  }
+
+  instanddelete(id: number | undefined): void {
+    if (id !== undefined) {
+      this.targetsystemcredentialsService.delete(id).subscribe(() => {
+        this.activeModal.close('deleted');
+      });
+    }
+    this.loadPage();
   }
 
   protected sort(): string[] {
@@ -124,6 +153,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
     }
     this.targetsystemcredentials = data ?? [];
     this.ngbPaginationPage = this.page;
+    this.removeDouble();
   }
 
   protected onError(): void {

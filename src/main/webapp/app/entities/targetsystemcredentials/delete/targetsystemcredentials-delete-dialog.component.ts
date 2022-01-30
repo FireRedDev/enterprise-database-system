@@ -16,7 +16,7 @@ export class TargetsystemcredentialsDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
+  public confirmDelete(id: number): void {
     this.targetsystemcredentialsService.delete(id).subscribe(() => {
       this.activeModal.close('deleted');
     });

@@ -7,7 +7,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
-import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';
@@ -40,6 +40,7 @@ import { NavEntitiesComponent } from './entities/nav-entities/nav-entities.compo
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-', caseSensitive: true }),
   ],
   providers: [
+    NgbActiveModal,
     Title,
     { provide: LOCALE_ID, useValue: 'de' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
