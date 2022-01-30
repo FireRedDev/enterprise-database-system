@@ -78,6 +78,16 @@ export class TargetsystemComponent implements OnInit {
     });
   }
 
+  downloadCsv(targetsystem: ITargetsystem): void {
+    location.href =
+      'http://localhost:8080/api/targetsystemcredentials/csv/' + targetsystem.id!.toString() + '/' + targetsystem.csvAttributes!.toString();
+  }
+  downloadXML(targetsystem: ITargetsystem): void {
+    location.href = 'http://localhost:8080/api/targetsystemcredentials/xml/' + targetsystem.id!.toString();
+  }
+  downloadJSON(targetsystem: ITargetsystem): void {
+    location.href = 'http://localhost:8080/api/targetsystemcredentials/json/' + targetsystem.id!.toString();
+  }
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {

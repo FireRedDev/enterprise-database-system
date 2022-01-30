@@ -87,6 +87,18 @@
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline">Delete</span>
               </button>
+
+              <button *ngIf="targetsystem!.type == 'csv'" type="submit" class="btn btn-info btn-sm" (click)="downloadCsv(targetsystem!)">
+                <i class="fas fa-download"></i>
+                <span class="d-none d-md-inline"> Download CSV </span>
+              </button>
+              <button *ngIf="targetsystem!.type == 'xml'" type="submit" class="btn btn-info btn-sm" (click)="downloadXML(targetsystem!)">
+                <i class="fas fa-download"></i>
+                <span class="d-none d-md-inline">Download XML </span>
+              </button>
+              <button *ngIf="targetsystem!.type == 'json'" type="submit" class="btn btn-info btn-sm" (click)="downloadJSON(targetsystem!)">
+                <span class="d-none d-md-inline">Download JSON </span>
+              </button>
             </div>
           </td>
         </tr>
