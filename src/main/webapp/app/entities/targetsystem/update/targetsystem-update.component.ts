@@ -19,7 +19,7 @@ export class TargetsystemUpdateComponent implements OnInit {
   url = 'EMPTY';
   username = '';
   password = '';
-  attributes = ['id', 'username', 'password', 'Systemuser', 'Targetsystem'];
+  attributes = ['Id', 'Username', 'Password', 'Systemuser', 'Targetsystem'];
   attributesString = '';
   attributesFinal = this.attributes;
   attributesBoolean = [true, true, true, true, true];
@@ -37,6 +37,7 @@ export class TargetsystemUpdateComponent implements OnInit {
   constructor(protected targetsystemService: TargetsystemService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.attributes = ['Id', 'Username', 'Password', 'Systemuser', 'Targetsystem'];
     this.activatedRoute.data.subscribe(({ targetsystem }) => {
       this.updateForm(targetsystem);
     });
@@ -47,10 +48,12 @@ export class TargetsystemUpdateComponent implements OnInit {
   }
 
   onCheckChange2(): void {
+    this.attributesString = '';
     for (let i = 0; i < this.attributesBoolean.length; i++) {
       if (!this.attributesBoolean[i]) {
         this.attributesFinal[i] = '';
       } else {
+        this.attributesString += this.attributes[i] + ',';
         this.attributesFinal[i] = this.attributes[i];
       }
     }
@@ -70,8 +73,12 @@ export class TargetsystemUpdateComponent implements OnInit {
   }
 
   save(): void {
+    this.onCheckChange2();
     this.isSaving = true;
     const targetsystem = this.createFromForm();
+    if (targetsystem.type !== 'csv') {
+      targetsystem.csvAttributes = '';
+    }
     if (targetsystem.id !== undefined) {
       this.subscribeToSaveResponse(this.targetsystemService.update(targetsystem));
     } else {
@@ -147,6 +154,9 @@ export class TargetsystemUpdateComponent implements OnInit {
   protected createFromForm(): ITargetsystem {
     if (this.editForm.get(['type'])!.value === 'db') {
       this.generateDbConnection();
+    }
+    if (this.editForm.get(['type'])!.value !== 'csv') {
+      this.attributesString = '';
     }
 
     return {
