@@ -11,14 +11,15 @@ import org.bouncycastle.openssl.PasswordException;
 
 public class TargetSystemJdbc {
 
-    //Database 1:jdbc:mysql://localhost:3306/test test test
-    //Database 2: jdbc:mysql://localhost:3306/sys test test
+    //Database 1:jdbc:mysql://localhost:3306/test?useSSL=false test test
+    //Database 2: jdbc:mysql://localhost:3306/sys?useSSL=false test test
+    //Database for Docker: jdbc:mysql://host.docker.internal/test?useSSL=false
     public static void copyDatabaseData(String url, String username, String password) throws SQLException {
         try {
             Connection connection2 = DriverManager.getConnection(url, username, password);
             Statement stmt2 = connection2.createStatement();
             String createTable =
-                "CREATE TABLE TARGETSYSTEMCREDENTIALS " +
+                "CREATE TABLE IF NOT EXISTS TARGETSYSTEMCREDENTIALS " +
                 "(id LONG, " +
                 "USERNAME VARCHAR(255), " +
                 "PASSWORD VARCHAR(255)," +
@@ -30,6 +31,7 @@ public class TargetSystemJdbc {
             } catch (SQLException e) {
                 System.out.println("Table targetsystemcredentials already exists");
             }
+            connection2.close();
         } catch (SQLException e) { // | PasswordException e) {
             System.out.println(e);
         }
@@ -76,6 +78,8 @@ public class TargetSystemJdbc {
                 stmt.setLong(5, targetSystemId);
                 stmt.executeUpdate();
             }
+
+            connection2.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -88,6 +92,8 @@ public class TargetSystemJdbc {
             String delete = "DELETE FROM TARGETSYSTEMCREDENTIALS WHERE ID =" + id;
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(delete);
+
+            connection.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -102,6 +108,7 @@ public class TargetSystemJdbc {
                     String delete = "DELETE FROM TARGETSYSTEMCREDENTIALS WHERE ID =" + id;
                     Statement stmt = con.createStatement();
                     stmt.executeUpdate(delete);
+                    con.close();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
