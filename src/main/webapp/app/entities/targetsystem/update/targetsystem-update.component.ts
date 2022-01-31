@@ -23,6 +23,8 @@ export class TargetsystemUpdateComponent implements OnInit {
   attributesString = '';
   attributesFinal = this.attributes;
   attributesBoolean = [true, true, true, true, true];
+  userDn = '';
+  baseDn = '';
   tryin: any;
   editForm = this.fb.group({
     id: [],
@@ -135,6 +137,8 @@ export class TargetsystemUpdateComponent implements OnInit {
       password: targetsystem.password,
       username: targetsystem.username,
       csvAttribute: targetsystem.csvAttributes,
+      userDn: targetsystem.userDn,
+      baseDn: targetsystem.baseDn,
     });
   }
 
@@ -148,6 +152,8 @@ export class TargetsystemUpdateComponent implements OnInit {
       password: this.editForm.get(['password'])!.value,
       username: this.editForm.get(['username'])!.value,
       csvAttributes: this.attributesString,
+      userDn: this.editForm.get(['user_dn'])!.value,
+      baseDn: this.editForm.get(['base_dn'])!.value,
     };
   }
 
@@ -168,6 +174,8 @@ export class TargetsystemUpdateComponent implements OnInit {
       password: this.editForm.get(['password'])!.value,
       username: this.editForm.get(['username'])!.value,
       csvAttributes: this.attributesString,
+      userDn: this.editForm.get(['user_dn'])!.value,
+      baseDn: this.editForm.get(['base_dn'])!.value,
     };
   }
 }

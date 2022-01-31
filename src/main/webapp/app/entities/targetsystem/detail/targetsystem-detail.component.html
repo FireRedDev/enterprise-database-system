@@ -44,17 +44,25 @@
         <dd>
           <span>{{ targetsystem.type }}</span>
         </dd>
-        <dt *ngIf="targetsystem.type == 'db'"><span>Url</span></dt>
-        <dd *ngIf="targetsystem.type == 'db'">
+        <dt *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'"><span>Url</span></dt>
+        <dd *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'">
           <span>{{ targetsystem.url }}</span>
         </dd>
-        <dt *ngIf="targetsystem.type == 'db'"><span>Password</span></dt>
-        <dd *ngIf="targetsystem.type == 'db'">
+        <dt *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'"><span>Password</span></dt>
+        <dd *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'">
           <span>{{ targetsystem.password }}</span>
         </dd>
-        <dt *ngIf="targetsystem.type == 'db'"><span>Username</span></dt>
-        <dd *ngIf="targetsystem.type == 'db'">
+        <dt *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'"><span>Username</span></dt>
+        <dd *ngIf="targetsystem.type == 'db' || targetsystem.type == 'ldap'">
           <span>{{ targetsystem.username }}</span>
+        </dd>
+        <dt *ngIf="targetsystem.type == 'ldap'"><span>UserDn</span></dt>
+        <dd *ngIf="targetsystem.type == 'ldap'">
+          <span>{{ targetsystem.userDn }}</span>
+        </dd>
+        <dt *ngIf="targetsystem.type == 'ldap'"><span>BaseDn</span></dt>
+        <dd *ngIf="targetsystem.type == 'ldap'">
+          <span>{{ targetsystem.baseDn }}</span>
         </dd>
         <dt *ngIf="targetsystem.type == 'csv'"><span>CSV Attributes</span></dt>
         <dd *ngIf="targetsystem.type == 'csv'">
