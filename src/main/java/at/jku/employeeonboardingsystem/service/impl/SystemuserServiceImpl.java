@@ -121,8 +121,8 @@ public class SystemuserServiceImpl implements SystemuserService {
             Targetsystem targetsystem = targetsystemcredentials.getTargetsystem();
             LdapContextSource ctxSrc = new LdapContextSource();
             ctxSrc.setUrl(targetsystem.getUrl());
-            ctxSrc.setBase("dc=memorynotfound,dc=com");
-            //ctxSrc.setUserDn("<user>@memorynotfound.com");
+            ctxSrc.setBase(targetsystem.getbaseDn());
+            ctxSrc.setUserDn(targetsystem.getUserDn());
             ctxSrc.setPassword(targetsystem.getPassword());
 
             ctxSrc.afterPropertiesSet(); // this method should be called.
