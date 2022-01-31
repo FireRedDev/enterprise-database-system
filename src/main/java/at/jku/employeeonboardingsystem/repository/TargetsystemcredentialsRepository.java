@@ -16,4 +16,5 @@ public interface TargetsystemcredentialsRepository
     extends JpaRepository<Targetsystemcredentials, Long>, JpaSpecificationExecutor<Targetsystemcredentials> {
     List<Targetsystemcredentials> findBySystemuser(Systemuser systemuser);
     boolean existsTargetsystemcredentialsBySystemuserAndTargetsystem(Systemuser systemuser, Targetsystem targetsystem);
+    Long deleteBySystemuserAndTargetsystem(Systemuser systemuser, Targetsystem targetsystem);
 }

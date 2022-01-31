@@ -59,7 +59,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
       );
   }
 
-  removeDouble(): void {
+  /*removeDouble(): void {
     let deleted = false;
     for (let i = 0; i < this.targetsystemcredentials!.length; i++) {
       this.targetsystemcredentials?.forEach(cred => {
@@ -73,7 +73,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
         }
       });
     }
-  }
+  }*/
 
   downloadCsv(targetsystem: ITargetsystem): void {
     location.href =
@@ -89,7 +89,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
   ngOnInit(): void {
     this.handleNavigation();
     this.main.showFooter = true;
-    this.removeDouble();
+    //this.removeDouble();
   }
 
   trackId(index: number, item: ITargetsystemcredentials): number {
@@ -153,7 +153,7 @@ export class TargetsystemcredentialsComponent implements OnInit {
     }
     this.targetsystemcredentials = data ?? [];
     this.ngbPaginationPage = this.page;
-    this.removeDouble();
+    // this.removeDouble();
   }
 
   protected onError(): void {
