@@ -65,6 +65,12 @@ public class TargetsystemServiceImpl implements TargetsystemService {
                 if (targetsystem.getCsvAttributes() != null) {
                     existingTargetsystem.setCsvAttributes(targetsystem.getCsvAttributes());
                 }
+                if (targetsystem.getUserDn() != null) {
+                    existingTargetsystem.setUserDn(targetsystem.getUserDn());
+                }
+                if (targetsystem.getbaseDn() != null) {
+                    existingTargetsystem.setBaseDn(targetsystem.getbaseDn());
+                }
                 return existingTargetsystem;
             })
             .map(targetsystemRepository::save);

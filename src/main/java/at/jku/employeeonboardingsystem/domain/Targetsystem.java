@@ -39,6 +39,12 @@ public class Targetsystem implements Serializable {
     @Column(name = "csvAttributes")
     private String csvAttributes;
 
+    @Column(name = "userDn")
+    private String userDn;
+
+    @Column(name = "baseDn")
+    private String baseDn;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -48,6 +54,32 @@ public class Targetsystem implements Serializable {
     public Targetsystem id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public Targetsystem userDn(String userDn) {
+        this.setUserDn(userDn);
+        return this;
+    }
+
+    public String getUserDn() {
+        return userDn;
+    }
+
+    public void setUserDn(String userDn) {
+        this.userDn = userDn;
+    }
+
+    public Targetsystem baseDn(String baseDn) {
+        this.setBaseDn(baseDn);
+        return this;
+    }
+
+    public String getbaseDn() {
+        return baseDn;
+    }
+
+    public void setBaseDn(String baseDn) {
+        this.baseDn = baseDn;
     }
 
     public void setId(Long id) {
@@ -161,7 +193,9 @@ public class Targetsystem implements Serializable {
             ", url='" + getUrl() + "'" +
             ", password='" + getPassword() + "'" +
             ", username='" + getUsername() + "'" +
-            ",csvAttributes='"+getCsvAttributes()+"'"+
+            ", csvAttributes='"+getCsvAttributes()+"'"+
+            ", userDn='"+getUserDn()+"'"+
+            ", baseDn='"+getbaseDn()+"'"+
             "}";
     }
 }

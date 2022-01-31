@@ -27,6 +27,8 @@ describe('Targetsystem Service', () => {
       password: 'AAAAAAA',
       username: 'AAAAAAA',
       csvAttributes: 'AAAAAAA',
+      userDn: 'AAAAAAA',
+      baseDn: 'AAAAAAA',
     };
   });
 
@@ -68,6 +70,8 @@ describe('Targetsystem Service', () => {
           password: 'BBBBBB',
           username: 'BBBBBB',
           csvAttributes: 'BBBBBB',
+          userDn: 'BBBBBB',
+          baseDn: 'BBBBBB',
         },
         elemDefault
       );
@@ -112,6 +116,8 @@ describe('Targetsystem Service', () => {
           password: 'BBBBBB',
           username: 'BBBBBB',
           csvAttributes: 'BBBBBB',
+          userDn: 'BBBBBB',
+          baseDn: 'BBBBBB',
         },
         elemDefault
       );

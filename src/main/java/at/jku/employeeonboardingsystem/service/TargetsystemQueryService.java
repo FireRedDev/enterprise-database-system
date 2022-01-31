@@ -102,6 +102,12 @@ public class TargetsystemQueryService extends QueryService<Targetsystem> {
             if (criteria.getCsvAttributes() != null) {
                 specification = specification.and(buildSpecification(criteria.getCsvAttributes(), Targetsystem_.csvAttributes));
             }
+            if (criteria.getUserDn() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserDn(), Targetsystem_.userDn));
+            }
+            if (criteria.getBaseDn() != null) {
+                specification = specification.and(buildSpecification(criteria.getBaseDn(), Targetsystem_.baseDn));
+            }
         }
         return specification;
     }

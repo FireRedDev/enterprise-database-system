@@ -6,6 +6,8 @@ export interface ITargetsystem {
   password?: string | null;
   username?: string | null;
   csvAttributes?: string | null;
+  userDn?: string | null;
+  baseDn?: string | null;
 }
 
 export class Targetsystem implements ITargetsystem {
@@ -16,7 +18,9 @@ export class Targetsystem implements ITargetsystem {
     public url?: string | null,
     public password?: string | null,
     public username?: string | null,
-    public csvAttributes?: string | null
+    public csvAttributes?: string | null,
+    public userDn?: string | null,
+    public baseDn?: string | null
   ) {}
 }
 

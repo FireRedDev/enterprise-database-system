@@ -46,6 +46,8 @@
           <th scope="col" jhiSortBy="url"><span>Url</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="password"><span>Password</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="username"><span>Username</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="user_dn"><span>UserDn</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="base_dn"><span>BaseDn</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="csv_attributes"><span>CSV Attribute</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -60,9 +62,22 @@
           <td>{{ targetsystem.url }}</td>
           <td>{{ targetsystem.password }}</td>
           <td>{{ targetsystem.username }}</td>
+          <td>{{ targetsystem.userDn }}</td>
+          <td>{{ targetsystem.baseDn }}</td>
           <td>{{ targetsystem.csvAttributes }}</td>
           <td class="text-right">
             <div class="btn-group">
+              <button *ngIf="targetsystem!.type == 'csv'" type="submit" class="btn btn-info btn-sm" (click)="downloadCsv(targetsystem!)">
+                <i class="fas fa-download"></i>
+                <span class="d-none d-md-inline"> Download CSV </span>
+              </button>
+              <button *ngIf="targetsystem!.type == 'xml'" type="submit" class="btn btn-info btn-sm" (click)="downloadXML(targetsystem!)">
+                <i class="fas fa-download"></i>
+                <span class="d-none d-md-inline">Download XML </span>
+              </button>
+              <button *ngIf="targetsystem!.type == 'json'" type="submit" class="btn btn-info btn-sm" (click)="downloadJSON(targetsystem!)">
+                <span class="d-none d-md-inline">Download JSON </span>
+              </button>
               <button
                 type="submit"
                 [routerLink]="['/targetsystem', targetsystem.id, 'view']"
@@ -86,18 +101,6 @@
               <button type="submit" (click)="delete(targetsystem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline">Delete</span>
-              </button>
-
-              <button *ngIf="targetsystem!.type == 'csv'" type="submit" class="btn btn-info btn-sm" (click)="downloadCsv(targetsystem!)">
-                <i class="fas fa-download"></i>
-                <span class="d-none d-md-inline"> Download CSV </span>
-              </button>
-              <button *ngIf="targetsystem!.type == 'xml'" type="submit" class="btn btn-info btn-sm" (click)="downloadXML(targetsystem!)">
-                <i class="fas fa-download"></i>
-                <span class="d-none d-md-inline">Download XML </span>
-              </button>
-              <button *ngIf="targetsystem!.type == 'json'" type="submit" class="btn btn-info btn-sm" (click)="downloadJSON(targetsystem!)">
-                <span class="d-none d-md-inline">Download JSON </span>
               </button>
             </div>
           </td>

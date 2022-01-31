@@ -36,6 +36,10 @@ public class TargetsystemCriteria implements Serializable, Criteria {
 
     private StringFilter csvAttributes;
 
+    private StringFilter userDn;
+
+    private StringFilter baseDn;
+
     public TargetsystemCriteria() {}
 
     public TargetsystemCriteria(TargetsystemCriteria other) {
@@ -46,6 +50,8 @@ public class TargetsystemCriteria implements Serializable, Criteria {
         this.password = other.password == null ? null : other.password.copy();
         this.username = other.username == null ? null : other.username.copy();
         this.csvAttributes = other.csvAttributes == null ? null : other.csvAttributes.copy();
+        this.userDn = other.userDn == null ? null : other.userDn.copy();
+        this.baseDn = other.baseDn == null ? null : other.baseDn.copy();
         this.distinct = other.distinct;
     }
 
@@ -63,6 +69,36 @@ public class TargetsystemCriteria implements Serializable, Criteria {
             id = new LongFilter();
         }
         return id;
+    }
+
+    public StringFilter getUserDn() {
+        return userDn;
+    }
+
+    public StringFilter userDn() {
+        if (userDn == null) {
+            userDn = new StringFilter();
+        }
+        return userDn;
+    }
+
+    public void setUserDn(StringFilter userDn) {
+        this.userDn = userDn;
+    }
+
+    public StringFilter getBaseDn() {
+        return baseDn;
+    }
+
+    public StringFilter baseDn() {
+        if (baseDn == null) {
+            baseDn = new StringFilter();
+        }
+        return baseDn;
+    }
+
+    public void setBaseDn(StringFilter baseDn) {
+        this.baseDn = baseDn;
     }
 
     public void setId(LongFilter id) {
@@ -184,13 +220,15 @@ public class TargetsystemCriteria implements Serializable, Criteria {
             Objects.equals(password, that.password) &&
             Objects.equals(username, that.username) &&
             Objects.equals(distinct, that.distinct) &&
-            Objects.equals(csvAttributes, that.csvAttributes)
+            Objects.equals(csvAttributes, that.csvAttributes) &&
+            Objects.equals(userDn, that.userDn) &&
+            Objects.equals(baseDn, that.baseDn)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, type, url, password, username, distinct, csvAttributes);
+        return Objects.hash(id, name, type, url, password, username, distinct, csvAttributes, userDn, baseDn);
     }
 
     // prettier-ignore
@@ -205,6 +243,8 @@ public class TargetsystemCriteria implements Serializable, Criteria {
             (username != null ? "username=" + username + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             (csvAttributes != null ? "csvAttribute=" + csvAttributes +", ":"")+
+            (userDn != null ? "userDn= "+ userDn + ", ": "")+
+            (baseDn != null ? "baseDn= "+baseDn + ", ": "")+
             "}";
     }
 }

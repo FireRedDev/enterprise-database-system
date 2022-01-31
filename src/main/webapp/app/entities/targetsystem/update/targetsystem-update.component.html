@@ -74,6 +74,30 @@
               [(ngModel)]="password"
             />
           </div>
+          <div class="form-group">
+            <label class="form-control-label" for="user_dn">UserDn</label>
+            <input
+              type="text"
+              class="form-control"
+              name="user_dn"
+              id="user_dn"
+              data-cy="user_dn"
+              formControlName="user_dn"
+              [(ngModel)]="userDn"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="base_dn">BaseDn</label>
+            <input
+              type="text"
+              class="form-control"
+              name="base_dn"
+              id="base_dn"
+              data-cy="base_dn"
+              formControlName="base_dn"
+              [(ngModel)]="baseDn"
+            />
+          </div>
         </div>
 
         <div>
