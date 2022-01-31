@@ -34,6 +34,8 @@ export class TargetsystemUpdateComponent implements OnInit {
     password: [],
     username: [],
     csvAttributes: [],
+    user_dn: [],
+    base_dn: [],
   });
 
   constructor(protected targetsystemService: TargetsystemService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
