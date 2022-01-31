@@ -5,6 +5,8 @@ import at.jku.employeeonboardingsystem.domain.Systemuser;
 import at.jku.employeeonboardingsystem.domain.Targetsystem;
 import at.jku.employeeonboardingsystem.jdbc.TargetSystemJdbc;
 import at.jku.employeeonboardingsystem.repository.SystemuserRepository;
+import at.jku.employeeonboardingsystem.repository.TargetsystemRepository;
+import at.jku.employeeonboardingsystem.repository.TargetsystemcredentialsRepository;
 import at.jku.employeeonboardingsystem.service.SystemuserQueryService;
 import at.jku.employeeonboardingsystem.service.SystemuserService;
 import at.jku.employeeonboardingsystem.service.criteria.SystemuserCriteria;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import liquibase.pro.packaged.t;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +33,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.supercsv.io.CsvBeanWriter;
@@ -59,14 +63,18 @@ public class SystemuserResource {
 
     private final SystemuserQueryService systemuserQueryService;
 
+    private final TargetsystemcredentialsRepository targetsystemcredentialsRepository;
+
     public SystemuserResource(
         SystemuserService systemuserService,
         SystemuserRepository systemuserRepository,
-        SystemuserQueryService systemuserQueryService
+        SystemuserQueryService systemuserQueryService,
+        TargetsystemcredentialsRepository targetsystemcredentialsRepository
     ) {
         this.systemuserService = systemuserService;
         this.systemuserRepository = systemuserRepository;
         this.systemuserQueryService = systemuserQueryService;
+        this.targetsystemcredentialsRepository = targetsystemcredentialsRepository;
     }
 
     @GetMapping("/users/xml/{id}")
@@ -164,6 +172,7 @@ public class SystemuserResource {
      * or with status {@code 500 (Internal Server Error)} if the systemuser couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @Transactional
     @PutMapping("/systemusers/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')" + "|| hasAuthority('ROLE_HR')")
     public ResponseEntity<Systemuser> updateSystemuser(
@@ -175,6 +184,11 @@ public class SystemuserResource {
         List<Systemuser> users = user.map(Collections::singletonList).orElseGet(Collections::emptyList);
         for (Department d : users.get(0).getDepartments()) {
             if (!systemuser.getDepartments().contains(d)) {
+                d
+                    .getTargetsystems()
+                    .forEach(t -> {
+                        targetsystemcredentialsRepository.deleteBySystemuserAndTargetsystem(users.get(0), t);
+                    });
                 try {
                     TargetSystemJdbc.deleteFromDatabaseWithUser(d, users.get(0));
                 } catch (Exception ex) {
